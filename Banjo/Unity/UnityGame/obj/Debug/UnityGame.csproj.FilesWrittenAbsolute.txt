@@ -1,4 +1,0 @@
-/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Game.Unity.dll.mdb
-/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Game.Unity.dll
-/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityGame/obj/Debug/Game.Unity.dll
-/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityGame/obj/Debug/Game.Unity.dll.mdb

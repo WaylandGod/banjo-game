@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SolutionDir>$(ProjectDir)/../../../</SolutionDir>
-    <ToolsDir>$(SolutionDir)../../tools/</ToolsDir>
+    <ToolsDir>$(SolutionDir)tools/</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
   </PropertyGroup>
   <PropertyGroup>
@@ -42,10 +42,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="UnityEditor">
-      <HintPath>..\..\..\..\..\tools\External\Unity\UnityEditor.dll</HintPath>
+      <HintPath>..\..\..\lib\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Graphs">
-      <HintPath>..\..\..\..\..\tools\External\Unity\UnityEditor.Graphs.dll</HintPath>
+      <HintPath>..\..\..\lib\UnityEditor.Graphs.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

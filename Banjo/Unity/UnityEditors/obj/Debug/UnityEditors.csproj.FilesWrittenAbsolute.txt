@@ -1,4 +1,0 @@
-/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Unity.CustomEditors.dll.mdb
-/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Unity.CustomEditors.dll
-/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityEditors/obj/Debug/Unity.CustomEditors.dll
-/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityEditors/obj/Debug/Unity.CustomEditors.dll.mdb

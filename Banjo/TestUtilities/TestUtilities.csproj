@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SolutionDir>$(ProjectDir)/../../</SolutionDir>
-    <ToolsDir>$(SolutionDir)../../tools/</ToolsDir>
+    <ToolsDir>$(SolutionDir)tools/</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
     <TestAssembly>True</TestAssembly>
   </PropertyGroup>
@@ -40,7 +40,8 @@
       <HintPath>$(SolutionDir)\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
-      <HintPath>$(SolutionDir)\lib\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
