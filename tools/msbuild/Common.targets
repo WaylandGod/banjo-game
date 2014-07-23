@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+  =============================================================================
+  Setup path properties (Requires all solutions be same depth from tools dir)
+  =============================================================================
+  -->
+  <PropertyGroup>
+    <TestAssembly Condition=" '$(TestAssembly)' == '' ">False</TestAssembly>
+    <BuildToolsDir Condition=" '$(BuildToolsDir)' == '' ">$(SolutionDir)../../tools/msbuild/</BuildToolsDir>
+    <ToolsDir Condition=" '$(ToolsDir)' == '' ">$(BuildToolsDir)../</ToolsDir>
+    <OutDir Condition="!$(TestAssembly)">$(SolutionDir)bin/$(Platform)/$(Configuration)</OutDir>
+    <OutputPath Condition="!$(TestAssembly)">$(OutDir)</OutputPath>
+  </PropertyGroup>
+
+  <!--
+  =============================================================================
+  Standard configuration properties (may be overridden by platform targets)
+  =============================================================================
+  -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+  </ItemGroup>
+
+  <!--
+  ==============================================================
+  Import miscellaneous build utilities/extensions
+  ==============================================================
+  -->
+  <Import Project="$(BuildToolsDir)MSBuildExtensionPack/MSBuild.ExtensionPack.tasks" />
+
+  <!--
+  =======================================
+  Import platform specific targets
+  =======================================
+  -->
+  <Import Project="$(BuildToolsDir)unity.targets" />
+  <!--
+  <Import Project="$(BuildToolsDir)Dot42.targets"  Condition=" '$(Platform)' == 'dot42' " />
+  <Import Project="$(BuildToolsDir)CSharp.targets"  Condition=" '$(Platform)' == 'AnyCPU' " />
+  <Import Project="$(BuildToolsDir)Xna.Xbox360.targets"  Condition=" '$(Platform)' == 'Xbox 360' " />
+  <Import Project="$(BuildToolsDir)Xna.WindowsPhone.targets"  Condition=" '$(Platform)' == 'Windows Phone' " />
+  <Import Project="$(BuildToolsDir)unity.targets"  Condition=" '$(Platform)' == 'Unity' " />
+  -->
+  <!--
+  ==============================================================
+  Resolve Cross-Solution Reference Paths
+  ==============================================================
+  -->
+  <Target Name="BeforeResolveReferences">
+    <ItemGroup>
+      <CrossSolutionSearchPathFiles Include="$(OutDir)/*.dll" />
+    </ItemGroup>
+    <RemoveDuplicates Inputs="@(CrossSolutionSearchPathFiles->'%(RootDir)%(Directory)')">
+      <Output TaskParameter="Filtered" ItemName="CrossSolutionSearchPath" />
+    </RemoveDuplicates>
+    <CreateProperty Value="@(CrossSolutionSearchPath);$(AssemblySearchPaths)">
+      <Output TaskParameter="Value"
+              PropertyName="AssemblySearchPaths" />
+    </CreateProperty>
+    <Message Text="Cross-Solution Search Path: @(CrossSolutionSearchPath)" />
+  </Target>
+</Project>

@@ -1,0 +1,4 @@
+/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Core.dll.mdb
+/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Core.dll
+/home/zarker/git/orbital/unity/code/Banjo/Core/obj/Debug/Core.dll
+/home/zarker/git/orbital/unity/code/Banjo/Core/obj/Debug/Core.dll.mdb

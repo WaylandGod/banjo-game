@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SolutionDir>$(ProjectDir)/../../../</SolutionDir>
+    <ToolsDir>$(SolutionDir)../../tools/</ToolsDir>
+    <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{257A80D0-7CFD-4BFE-A95C-BA7D21029E6B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UnityCoreUnitTests</RootNamespace>
+    <AssemblyName>UnityCoreUnitTests</AssemblyName>
+    <TestAssembly>True</TestAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\..\..\..\..\..\..\usr\local\lib\monodevelop\AddIns\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DependencyContainerFixture.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityRuntime\UnityRuntime.csproj">
+      <Project>{6D9BF525-1CBC-4A09-AF4D-844FB35F872A}</Project>
+      <Name>UnityRuntime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityResources\UnityResources.csproj">
+      <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
+      <Name>UnityResources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityCore\UnityCore.csproj">
+      <Project>{C3DA89E1-70C6-7D6C-993E-C8F831D35880}</Project>
+      <Name>UnityCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestUtilities\TestUtilities.csproj">
+      <Project>{1C4643D9-52BD-4D03-BAB6-05A8274D0763}</Project>
+      <Name>TestUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(BuildToolsDir)Common.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentSwitchBody="True" IndentBlocksInsideExpressions="True" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="DoNotCare" ArrayInitializerWrapping="DoNotChange" ArrayInitializerBraceStyle="NextLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" SpacesBeforeBrackets="False" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+          <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

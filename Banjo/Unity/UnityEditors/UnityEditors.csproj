@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SolutionDir>$(ProjectDir)/../../../</SolutionDir>
+    <ToolsDir>$(SolutionDir)../../tools/</ToolsDir>
+    <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{838DC256-B7BC-40CA-9DC5-6860688C958D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Unity.CustomEditors</RootNamespace>
+    <AssemblyName>Unity.CustomEditors</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;CODE_ANALYSIS;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="EditorBase.cs" />
+    <Compile Include="Resources\ResourceLibraryBehaviour.cs" />
+    <Compile Include="Game\GameCustomEditor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\..\..\tools\External\Unity\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>..\..\..\..\..\tools\External\Unity\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityGame\UnityGame.csproj">
+      <Project>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</Project>
+      <Name>UnityGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityResources\UnityResources.csproj">
+      <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
+      <Name>UnityResources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Editors\" />
+  </ItemGroup>
+  <Import Project="$(BuildToolsDir)Common.targets" />
+</Project>

@@ -1,0 +1,4 @@
+/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Unity.Resources.dll.mdb
+/home/zarker/git/orbital/unity/code/bin/AnyCPU/Debug/Unity.Resources.dll
+/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityResources/obj/Debug/Unity.Resources.dll
+/home/zarker/git/orbital/unity/code/Banjo/Unity/UnityResources/obj/Debug/Unity.Resources.dll.mdb

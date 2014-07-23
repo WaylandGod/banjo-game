@@ -1,0 +1,13 @@
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/GameUnitTests.dll.mdb
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/GameUnitTests.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/obj/Debug/GameUnitTests.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/obj/Debug/GameUnitTests.dll.mdb
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/nunit.framework.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/Core.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/Core.dll.mdb
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/Game.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/Game.dll.mdb
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/TestUtilities.dll
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/TestUtilities.dll.mdb
+/home/zarker/git/orbital/unity/code/Banjo/GameUnitTests/bin/Debug/Rhino.Mocks.dll

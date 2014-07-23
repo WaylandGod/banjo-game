@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SolutionDir>$(ProjectDir)/../../</SolutionDir>
+    <ToolsDir>$(SolutionDir)../../tools/</ToolsDir>
+    <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2CF55784-DB0A-4F02-AAA8-E32A4952F8BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Game</RootNamespace>
+    <AssemblyName>Game</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CollisionEventArgs.cs" />
+    <Compile Include="Data\Element.cs" />
+    <Compile Include="EntityCollisionEventArgs.cs" />
+    <Compile Include="ICollidable.cs" />
+    <Compile Include="Programmability\EntityStateCheck.cs" />
+    <Compile Include="Programmability\EntityStateController.cs" />
+    <Compile Include="Programmability\EntityEventHandlers.cs" />
+    <Compile Include="Programmability\IEntityStateCheckProvider.cs" />
+    <Compile Include="TileCollisionEventArgs.cs" />
+    <Compile Include="Data\AvatarDefinition.cs" />
+    <Compile Include="Data\ControllerConfig.cs" />
+    <Compile Include="Data\LevelDefinition.cs" />
+    <Compile Include="Data\EntityDefinition.cs" />
+    <Compile Include="Data\LevelSummary.cs" />
+    <Compile Include="Data\TileDefinition.cs" />
+    <Compile Include="EntityBase.cs" />
+    <Compile Include="FrameEventArgs.cs" />
+    <Compile Include="Factories\AvatarFactoryBase.cs" />
+    <Compile Include="Factories\ReflectionControllerFactory.cs" />
+    <Compile Include="Factories\IControllerFactory.cs" />
+    <Compile Include="Factories\EntityFactoryBase.cs" />
+    <Compile Include="Factories\TileFactoryBase.cs" />
+    <Compile Include="Factories\WorldFactoryBase.cs" />
+    <Compile Include="Factories\ResourceFactoryBase.cs" />
+    <Compile Include="Factories\GameFactoryBase.cs" />
+    <Compile Include="Factories\IGameFactory.cs" />
+    <Compile Include="Factories\ITileFactory.cs" />
+    <Compile Include="Factories\IAvatarFactory.cs" />
+    <Compile Include="Factories\IEntityFactory.cs" />
+    <Compile Include="Factories\IWorldFactory.cs" />
+    <Compile Include="IObject.cs" />
+    <Compile Include="ObjectBase.cs" />
+    <Compile Include="TileBase.cs" />
+    <Compile Include="Data\Material.cs" />
+    <Compile Include="TileInstance.cs" />
+    <Compile Include="ITile.cs" />
+    <Compile Include="GameBase.cs" />
+    <Compile Include="Data\GameDefinition.cs" />
+    <Compile Include="AvatarState.cs" />
+    <Compile Include="IAvatar.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="IWorld.cs" />
+    <Compile Include="IGame.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Programmability\EntityController.cs" />
+    <Compile Include="Programmability\IEntityController.cs" />
+    <Compile Include="AvatarBase.cs" />
+    <Compile Include="WorldBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(BuildToolsDir)Common.targets" />
+</Project>

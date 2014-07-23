@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+  ==============================================================
+  Run code analysis
+  ==============================================================
+  -->
+  <PropertyGroup>
+    <!--
+    Make sure that assemblies are built with the CODE_ANALYSIS constant
+    This is required to make FxCop suppressions work.
+    -->
+    <DefineConstants>CODE_ANALYSIS;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  <Target Name="FxCop" AfterTargets="AfterBuild" Condition="'$(SkipFxCop)' != 'True'">
+    <PropertyGroup>
+      <FxCopDir>$(BuildToolsDir)Microsoft Fxcop 10.0\</FxCopDir>
+      <FxCopExe>$(FxCopDir)FxCopCmd.exe</FxCopExe>
+      <FxCopProject>$(FxCopDir)ProductRules.FxCop</FxCopProject>
+      <ReportPath>$(SolutionDir)$(SolutionName).$(ProjectName).FxCopReport.xml</ReportPath>
+      <FxCopCommand>"$(FxCopExe)" /gac /igc /c /s /f:"$(TargetPath)" /o:"$(ReportPath)" /p:"$(FxCopProject)"</FxCopCommand>
+    </PropertyGroup>
+    <Message Importance="high" Text="Running Code Analysis on $(TargetPath)..." />
+    <!-- Delete any existing reports from previous runs -->
+    <Delete Files="$(ReportPath)" ContinueOnError="true" />
+    <!-- Run FxCop -->
+    <Exec ContinueOnError="false" Command='$(FxCopCommand)' />
+    <!-- Error if an rules were violated -->
+    <Error Condition="'$(FxCopAsWarnings)' != 'True' And $([System.IO.File]::Exists(`$(ReportPath)`))"
+             Text="One or more FxCop rules violated."
+             File="$(ReportPath)" />
+  </Target>
+</Project>
