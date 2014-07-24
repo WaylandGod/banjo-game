@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SolutionDir>$(ProjectDir)/../../</SolutionDir>
-    <ToolsDir>$(SolutionDir)tools/</ToolsDir>
-    <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
+    <ToolsDir>$(ProjectDir)..\..\tools\</ToolsDir>
+    <BuildToolsDir>$(ToolsDir)msbuild\</BuildToolsDir>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -100,5 +99,5 @@
     <OutputPath>bin\Debug</OutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <Import Project="$(BuildToolsDir)/Common.targets" />
+  <Import Project="$(BuildToolsDir)Common.targets" />
 </Project>

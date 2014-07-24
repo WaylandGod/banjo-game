@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <ToolsDir>$(ProjectDir)..\..\tools\</ToolsDir>
+    <BuildToolsDir>$(ToolsDir)msbuild\</BuildToolsDir>
+    <ExternalLibDir>$(ToolsDir)..\lib\</ExternalLibDir>
+    <TestAssembly>True</TestAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{848B9012-CCD5-4748-81A2-556E93E344E3}</ProjectGuid>
@@ -29,7 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="nunit.framework">
-      <HintPath>$(SolutionDir)\lib\nunit.framework.dll</HintPath>
+      <HintPath>$(ExternalLibDir)nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -37,7 +43,7 @@
     <Compile Include="EntityFixture.cs" />
     <Compile Include="GameDataFixture.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(BuildToolsDir)Common.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
