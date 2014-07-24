@@ -2,15 +2,14 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--
   =============================================================================
-  Setup default path properties (Requires all solutions be same depth from tools dir)
+  Setup path properties (Requires all solutions be same depth from tools dir)
   =============================================================================
   -->
   <PropertyGroup>
-    <ToolsDir Condition=" '$(ToolsDir)' == '' ">$(ProjectDir)..\..\tools\</ToolsDir>
-    <BuildToolsDir Condition=" '$(BuildToolsDir)' == '' ">$(ToolsDir)msbuild\</BuildToolsDir>
-    <SolutionDir Condition=" '$(ToolsDir)' == '' ">$(ToolsDir)..\</SolutionDir>
+    <BuildToolsDir>$(MSBuildThisFileDirectory)\</BuildToolsDir>
+    <ToolsDir>$(BuildToolsDir)..\</ToolsDir>
     <TestAssembly Condition=" '$(TestAssembly)' == '' ">False</TestAssembly>
-    <OutDir Condition="!$(TestAssembly)">$(SolutionDir)bin/$(Platform)/$(Configuration)</OutDir>
+    <OutDir Condition="!$(TestAssembly)">$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
     <OutputPath Condition="!$(TestAssembly)">$(OutDir)</OutputPath>
   </PropertyGroup>
 
@@ -43,7 +42,7 @@
   Import miscellaneous build utilities/extensions
   ==============================================================
   -->
-  <Import Project="$(ToolsDir)msbuild\MSBuildExtensionPack\MSBuild.ExtensionPack.tasks" />
+  <Import Project="$(BuildToolsDir)MSBuildExtensionPack\MSBuild.ExtensionPack.tasks" />
 
   <!--
   =======================================

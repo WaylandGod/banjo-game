@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ToolsDir>$(ProjectDir)..\..\tools\</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild\</BuildToolsDir>
+    <ExternalLibDir>$(ToolsDir)..\lib\</ExternalLibDir>
     <TestAssembly>True</TestAssembly>
   </PropertyGroup>
   <PropertyGroup>

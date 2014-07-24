@@ -9,11 +9,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{257A80D0-7CFD-4BFE-A95C-BA7D21029E6B}</ProjectGuid>
+    <ProjectGuid>{E5309D89-FC05-4E96-8E5B-C13ABC744445}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>UnityCoreUnitTests</RootNamespace>
-    <AssemblyName>UnityCoreUnitTests</AssemblyName>
-    <TestAssembly>True</TestAssembly>
+    <RootNamespace>UnityGameUnitTests</RootNamespace>
+    <AssemblyName>UnityGameUnitTests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,42 +37,34 @@
     <Reference Include="nunit.framework">
       <HintPath>$(ExternalLibDir)nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>$(ExternalLibDir)Rhino.Mocks.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyContainerFixture.cs" />
+    <Compile Include="FactoriesFixture.cs" />
   </ItemGroup>
+  <Import Project="$(BuildToolsDir)Common.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\UnityGame\UnityGame.csproj">
+      <Project>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</Project>
+      <Name>UnityGame</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UnityRuntime\UnityRuntime.csproj">
       <Project>{6D9BF525-1CBC-4A09-AF4D-844FB35F872A}</Project>
       <Name>UnityRuntime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UnityResources\UnityResources.csproj">
-      <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
-      <Name>UnityResources</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UnityCore\UnityCore.csproj">
-      <Project>{C3DA89E1-70C6-7D6C-993E-C8F831D35880}</Project>
-      <Name>UnityCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Banjo\Core\Core.csproj">
       <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Banjo\Game\Game.csproj">
+      <Project>{2CF55784-DB0A-4F02-AAA8-E32A4952F8BA}</Project>
+      <Name>Game</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Banjo\TestUtilities\TestUtilities.csproj">
       <Project>{1C4643D9-52BD-4D03-BAB6-05A8274D0763}</Project>
       <Name>TestUtilities</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(BuildToolsDir)Common.targets" />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentSwitchBody="True" IndentBlocksInsideExpressions="True" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="DoNotCare" ArrayInitializerWrapping="DoNotChange" ArrayInitializerBraceStyle="NextLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" SpacesBeforeBrackets="False" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
-          <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
 </Project>

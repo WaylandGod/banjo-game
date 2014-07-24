@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ToolsDir>$(ProjectDir)..\..\tools\</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild\</BuildToolsDir>
+    <ExternalLibDir>$(ToolsDir)..\lib\</ExternalLibDir>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
