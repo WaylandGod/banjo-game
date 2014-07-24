@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ToolsDir>$(ProjectDir)/../../../tools/</ToolsDir>
+    <ToolsDir>$(ProjectDir)../../tools/</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</ProjectGuid>
+    <ProjectGuid>{838DC256-B7BC-40CA-9DC5-6860688C958D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Game.Unity</RootNamespace>
-    <AssemblyName>Game.Unity</AssemblyName>
+    <RootNamespace>Unity.CustomEditors</RootNamespace>
+    <AssemblyName>Unity.CustomEditors</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,45 +33,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\ObjectBehaviour.cs" />
-    <Compile Include="Behaviours\TileInstanceBehaviour.cs" />
-    <Compile Include="Behaviours\EntityBehaviour.cs" />
-    <Compile Include="Behaviours\WorldBehaviour.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="UnityAvatar.cs" />
-    <Compile Include="Behaviours\GameBehaviour.cs" />
-    <Compile Include="Factories\UnityAvatarFactory.cs" />
-    <Compile Include="Factories\UnityEntityFactory.cs" />
-    <Compile Include="Factories\UnityTileFactory.cs" />
-    <Compile Include="UnityEntity.cs" />
-    <Compile Include="UnityTile.cs" />
-    <Compile Include="UnityWorld.cs" />
-    <Compile Include="Factories\UnityWorldFactory.cs" />
-    <Compile Include="Factories\UnityGameFactory.cs" />
-    <Compile Include="UnityGame.cs" />
+    <Compile Include="EditorBase.cs" />
+    <Compile Include="Resources\ResourceLibraryBehaviour.cs" />
+    <Compile Include="Game\GameCustomEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\lib\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>..\..\lib\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj">
-      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Game\Game.csproj">
-      <Project>{2CF55784-DB0A-4F02-AAA8-E32A4952F8BA}</Project>
-      <Name>Game</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UnityCore\UnityCore.csproj">
-      <Project>{C3DA89E1-70C6-7D6C-993E-C8F831D35880}</Project>
-      <Name>UnityCore</Name>
+    <ProjectReference Include="..\UnityGame\UnityGame.csproj">
+      <Project>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</Project>
+      <Name>UnityGame</Name>
     </ProjectReference>
     <ProjectReference Include="..\UnityResources\UnityResources.csproj">
       <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
       <Name>UnityResources</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Banjo\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Editors\" />
+  </ItemGroup>
   <Import Project="$(BuildToolsDir)Common.targets" />
 </Project>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ToolsDir>$(ProjectDir)/../../../tools/</ToolsDir>
+    <ToolsDir>$(ProjectDir)../../tools/</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
     <TestAssembly>True</TestAssembly>
   </PropertyGroup>
@@ -42,10 +42,6 @@
     <Compile Include="DependencyContainerFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj">
-      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UnityRuntime\UnityRuntime.csproj">
       <Project>{6D9BF525-1CBC-4A09-AF4D-844FB35F872A}</Project>
       <Name>UnityRuntime</Name>
@@ -58,9 +54,13 @@
       <Project>{C3DA89E1-70C6-7D6C-993E-C8F831D35880}</Project>
       <Name>UnityCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestUtilities\TestUtilities.csproj">
+    <ProjectReference Include="..\..\Banjo\TestUtilities\TestUtilities.csproj">
       <Project>{1C4643D9-52BD-4D03-BAB6-05A8274D0763}</Project>
       <Name>TestUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Banjo\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(BuildToolsDir)Common.targets" />

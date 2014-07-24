@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity", "Unity", "{B8FA6569-43BD-4615-A9C5-B00FEB49A19B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityCore", "Banjo\Unity\UnityCore\UnityCore.csproj", "{C3DA89E1-70C6-7D6C-993E-C8F831D35880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityCore", "Unity\UnityCore\UnityCore.csproj", "{C3DA89E1-70C6-7D6C-993E-C8F831D35880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEditors", "Banjo\Unity\UnityEditors\UnityEditors.csproj", "{838DC256-B7BC-40CA-9DC5-6860688C958D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEditors", "Unity\UnityEditors\UnityEditors.csproj", "{838DC256-B7BC-40CA-9DC5-6860688C958D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityGame", "Banjo\Unity\UnityGame\UnityGame.csproj", "{EA2AC103-6AD2-4729-9ACC-891737DE3E58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityGame", "Unity\UnityGame\UnityGame.csproj", "{EA2AC103-6AD2-4729-9ACC-891737DE3E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityResources", "Banjo\Unity\UnityResources\UnityResources.csproj", "{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityResources", "Unity\UnityResources\UnityResources.csproj", "{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityRuntime", "Banjo\Unity\UnityRuntime\UnityRuntime.csproj", "{6D9BF525-1CBC-4A09-AF4D-844FB35F872A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityRuntime", "Unity\UnityRuntime\UnityRuntime.csproj", "{6D9BF525-1CBC-4A09-AF4D-844FB35F872A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityCoreUnitTests", "Banjo\Unity\UnityCoreUnitTests\UnityCoreUnitTests.csproj", "{257A80D0-7CFD-4BFE-A95C-BA7D21029E6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityCoreUnitTests", "Unity\UnityCoreUnitTests\UnityCoreUnitTests.csproj", "{257A80D0-7CFD-4BFE-A95C-BA7D21029E6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Banjo\Core\Core.csproj", "{779D7875-ADB7-45B6-AADD-658EDFD35081}"
 EndProject

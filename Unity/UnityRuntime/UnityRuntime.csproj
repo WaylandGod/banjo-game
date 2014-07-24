@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ToolsDir>$(ProjectDir)/../../../tools/</ToolsDir>
+    <ToolsDir>$(ProjectDir)../../tools/</ToolsDir>
     <BuildToolsDir>$(ToolsDir)msbuild/</BuildToolsDir>
   </PropertyGroup>
   <PropertyGroup>
@@ -38,17 +38,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj">
-      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Game\Game.csproj">
-      <Project>{2CF55784-DB0A-4F02-AAA8-E32A4952F8BA}</Project>
-      <Name>Game</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UnityCore\UnityCore.csproj">
       <Project>{C3DA89E1-70C6-7D6C-993E-C8F831D35880}</Project>
       <Name>UnityCore</Name>
@@ -60,6 +51,14 @@
     <ProjectReference Include="..\UnityResources\UnityResources.csproj">
       <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
       <Name>UnityResources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Banjo\Core\Core.csproj">
+      <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Banjo\Game\Game.csproj">
+      <Project>{2CF55784-DB0A-4F02-AAA8-E32A4952F8BA}</Project>
+      <Name>Game</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
