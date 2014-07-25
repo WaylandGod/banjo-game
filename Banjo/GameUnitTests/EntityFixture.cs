@@ -30,22 +30,26 @@ namespace GameUnitTests
         /// <summary>Random number generator for testing</summary>
         private static readonly Random R = new Random();
 
+        /// <summary>Test controller manager</summary>
+        private IControllerManager controllers;
+
         /// <summary>Test resource library</summary>
         private IResourceLibrary resources;
 
         /// <summary>Test avatar factory</summary>
-        private IAvatarFactory testAvatarFactory;
+        private IAvatarFactory avatarFactory;
 
         /// <summary>Test entity controller factory</summary>
-        private IControllerFactory testControllerFactory;
+        private IControllerFactory controllerFactory;
 
         /// <summary>Per-test initialization</summary>
         [SetUp]
         public void SetUp()
         {
             this.resources = new ResourceLibrary();
-            this.testAvatarFactory = new TestAvatarFactory(this.resources);
-            this.testControllerFactory = new ReflectionControllerFactory(new ControllerManager());
+            this.controllers = new ControllerManager();
+            this.avatarFactory = new TestAvatarFactory(this.resources);
+            this.controllerFactory = new ReflectionControllerFactory(this.controllers, this.resources);
             new DependencyContainer()
                 .RegisterSingleton<IControllerManager, ControllerManager>()
                 .RegisterSingleton<IInputManager, InputManager>();
@@ -72,8 +76,8 @@ namespace GameUnitTests
             var entity = new TestEntity(
                 entityDefinition,
                 this.resources,
-                this.testAvatarFactory,
-                this.testControllerFactory,
+                this.avatarFactory,
+                this.controllerFactory,
                 new ControllerConfig[0],
                 Vector3.Zero,
                 Vector3.Zero,
@@ -88,8 +92,8 @@ namespace GameUnitTests
             var position = R.NextVector3();
             var entity = new TestEntity(
                 this.resources,
-                this.testAvatarFactory,
-                this.testControllerFactory,
+                this.avatarFactory,
+                this.controllerFactory,
                 new ControllerConfig[0],
                 position,
                 Vector3.Zero,
@@ -132,8 +136,8 @@ namespace GameUnitTests
             var entity = new TestEntity(
                 entityDefinition,
                 this.resources,
-                this.testAvatarFactory,
-                this.testControllerFactory,
+                this.avatarFactory,
+                this.controllerFactory,
                 controllers,
                 Vector3.Zero,
                 Vector3.Zero,

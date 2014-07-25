@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Core;
+using Core.DependencyInjection;
 using Core.Programmability;
+using Core.Resources.Management;
 using Game.Data;
 using Game.Factories;
 using Game.Programmability;
@@ -22,12 +24,13 @@ namespace Game.Factories
     /// Valid controllers must
     ///   A) Implement IController
     ///   B) Have the Controller attribute (with a unique identifier)
-    ///   C) Have a constructor taking parameters (IEntity, IConfig)
+    ///   C) Have a constructor taking a parameter each of types IEntity and IConfig
+    ///   D) Additional parameters must be IResourceLibrary or registered with the global dependency container
     /// </remarks>
     public class ReflectionControllerFactory : FactoryBase<IEntityController>, IControllerFactory
     {
-        /// <summary>Required constructor parameter types</summary>
-        private static readonly Type[] RequiredConstructorTypes = new[] { typeof(IEntity), typeof(IConfig) };
+        /// <summary>Default constructor parameter types</summary>
+        private static readonly Type[] DefaultConstructorParameterTypes = new[] { typeof(IEntity), typeof(IConfig), typeof(IResourceLibrary) };
 
         /// <summary>Dictionary of entity controller types</summary>
         private readonly IDictionary<string, ConstructorInfo> constructors;
@@ -35,11 +38,16 @@ namespace Game.Factories
         /// <summary>Controller manager</summary>
         private readonly IControllerManager controllerManager;
 
+        /// <summary>Resource library</summary>
+        private readonly IResourceLibrary resources;
+
         /// <summary>Initializes a new instance of the ReflectionControllerFactory class</summary>
         /// <param name="controllerManager">Controller manager</param>
-        public ReflectionControllerFactory(IControllerManager controllerManager)
+        /// <param name="resourceLibrary">Resource library</param>
+        public ReflectionControllerFactory(IControllerManager controllerManager, IResourceLibrary resourceLibrary)
         {
             this.controllerManager = controllerManager;
+            this.resources = resourceLibrary;
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             //// Log.Trace("ControllerFactory - Searching for controllers in {0} assemblies: {1}", assemblies.Length, string.Join(", ", assemblies.Select(asm => asm.FullName).ToArray()));
@@ -61,20 +69,23 @@ namespace Game.Factories
 
                 if (attr == null)
                 {
-                    Log.Warning(
-                        "IController implementation '{0}' missing required attribute '[Controller(\"controller.identifier\")]' and will not be available.",
+                    Log.Error(
+                        "Skipping '{0}': IController implementation missing required attribute '[Controller(\"controller.identifier\")]'.",
                         type.FullName);
                     continue;
                 }
 
-                var ctor = type.GetConstructor(RequiredConstructorTypes);
+                var ctor = type.GetConstructors()
+                    .FirstOrDefault(c => c.GetParameters()
+                        .Select(p => p.ParameterType)
+                        .All(t => DefaultConstructorParameterTypes.Contains(t) || GlobalContainer.CanResolve(t)));
                 if (ctor == null)
                 {
-                    Log.Warning(
-                        "IController implementation '{0}' missing required constructor 'public {1}({2})' and will not be available",
+                    Log.Error(
+                        "Skipping '{0}': IController implementation did not contain any acceptable constructors.",
                         type.FullName,
                         type.Name,
-                        string.Join(", ", RequiredConstructorTypes.Select(t => t.FullName).ToArray()));
+                        string.Join(", ", DefaultConstructorParameterTypes.Select(t => t.FullName).ToArray()));
                     continue;
                 }
 
@@ -105,10 +116,23 @@ namespace Game.Factories
 #endif
 
             var ctor = this.constructors[controllerId];
-            
+
             //// Log.Trace("Creating controller '{0}' ({1}) with target '{2}'\nSettings: {3}", controllerId, ctor.DeclaringType.FullName, target.Id, settings);
 
-            var controller = (IEntityController)ctor.Invoke(new object[] { target, settings });
+            var defaultParameters = new Dictionary<Type, object>
+            {
+                { typeof(IConfig), settings },
+                { typeof(IEntity), target },
+                { typeof(IResourceLibrary), this.resources },
+            };
+            var parameters = ctor.GetParameters().Select(p => p.ParameterType)
+                .Select(t =>
+                    defaultParameters.ContainsKey(t) ? defaultParameters[t] :
+                    t.IsArray ? GlobalContainer.ResolveAll(t) :
+                    GlobalContainer.Resolve(t))
+                .ToArray();
+
+            var controller = (IEntityController)ctor.Invoke(parameters);
             this.controllerManager.AddController(controller);
             return controller;
         }

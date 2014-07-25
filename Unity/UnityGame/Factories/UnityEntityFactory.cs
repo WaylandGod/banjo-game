@@ -32,7 +32,7 @@ namespace Game.Unity.Factories
         /// <param name="direction">Initial direction</param>
         /// <param name="velocity">Initial velocity</param>
         /// <returns>The created IEntity instance</returns>
-        protected override IEntity Create(
+        public override IEntity Create(
             EntityDefinition definition,
             ControllerConfig[] controllers,
             Vector3 position,

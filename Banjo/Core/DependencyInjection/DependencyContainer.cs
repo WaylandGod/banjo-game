@@ -183,12 +183,19 @@ namespace Core.DependencyInjection
         /// <returns>Instances of the resolved types</returns>
         public IEnumerable<TType> ResolveAll<TType>()
         {
+            return this.ResolveAll(typeof(TType)).Cast<TType>();
+        }
+            
+        /// <summary>Resolve all registrations for a type</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <returns>Instances of the resolved types</returns>
+        public IEnumerable<object> ResolveAll(Type type)
+        {
             var registrations =
-                this.GetRegistrationsForType(typeof(TType)) ??
+                this.GetRegistrationsForType(type) ??
                 new Dictionary<string, TypeRegistration>(0);
             return registrations.Values
-                .Select(r => r.RealizeInstance())
-                .Cast<TType>();
+                .Select(r => r.RealizeInstance());
         }
 
         /// <summary>Adds a registration to the type registry</summary>

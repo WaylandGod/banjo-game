@@ -11,6 +11,7 @@ using Game;
 using Game.Data;
 using Game.Factories;
 using Game.Unity.Behaviours;
+using UnityEngine;
 
 namespace Game.Unity
 {
@@ -36,9 +37,9 @@ namespace Game.Unity
             IAvatarFactory avatarFactory,
             IControllerFactory controllerFactory,
             ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity)
+            Core.Vector3 position,
+            Core.Vector3 direction,
+            Core.Vector3 velocity)
             : base(definition, library, avatarFactory, controllerFactory, controllers, position, direction, velocity)
         {
             this.UnityAvatar.AddObjectBehaviour<EntityBehaviour>().Entity = this;

@@ -53,7 +53,7 @@ namespace Game.Unity
             }
             else
             {
-                Log.Error("UnityAvatar.Parent has not been set. All avatars will be created in the root of the scene.");
+                Log.Warning("UnityAvatar.Parent has not been set. All avatars will be created in the root of the scene.");
             }
 
             this.animator = this.GameObject.GetComponent<Animator>(true);

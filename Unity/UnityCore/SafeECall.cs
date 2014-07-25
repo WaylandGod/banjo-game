@@ -49,7 +49,7 @@ namespace Core.Unity
                     throw;
                 }
 
-                Log.Error("Unable to set WorldBehaviour.Instance.World outside of Unity: {0}", e);
+                Log.Warning("Unable to perform action outside of Unity: {0}", e);
             }
 #endif
         }

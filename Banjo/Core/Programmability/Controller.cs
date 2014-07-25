@@ -29,14 +29,14 @@ namespace Core.Programmability
         /// <param name="config">Controller configuration</param>
         public Controller(IControllerTarget target, IConfig config)
         {
-            this.Target = target;
-            this.Config = config;
             var controllerId =
                 this.GetType().GetCustomAttributes(typeof(ControllerAttribute), false)
                     .Cast<ControllerAttribute>()
                     .Select(attr => attr.Id)
                     .FirstOrDefault();
             this.Id = new RuntimeId(controllerId);
+            this.Target = target;
+            this.Config = config;
 
             //// Log.Trace("New controller - target: {0}, id: {1},\nsettings: {2}", target.Id, this.Id, this.Config);
         }

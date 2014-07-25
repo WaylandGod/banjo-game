@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,6 +35,40 @@ namespace Core.DependencyInjection
             set { instance = value; }
         }
 
+        /// <summary>Determines whether a type is registered</summary>
+        /// <typeparam name="TType">Type to resolve</typeparam>
+        /// <returns>True if the type can be resolved</returns>
+        public static bool CanResolve<TType>()
+        {
+            return CanResolve(typeof(TType));
+        }
+
+        /// <summary>Determines whether a type is registered</summary>
+        /// <typeparam name="TType">Type to resolve</typeparam>
+        /// <param name="label">Registration label (null for default)</param>
+        /// <returns>True if the type can be resolved</returns>
+        public static bool CanResolve<TType>(string label)
+        {
+            return CanResolve(typeof(TType), label);
+        }
+
+        /// <summary>Determines whether a type is registered</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <returns>True if the type can be resolved</returns>
+        public static bool CanResolve(Type type)
+        {
+            return CanResolve(type, null);
+        }
+
+        /// <summary>Determines whether a type is registered</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <param name="label">Registration label (null for default)</param>
+        /// <returns>True if the type can be resolved</returns>
+        public static bool CanResolve(Type t, string label)
+        {
+            return Instance.CanResolveImpl(t, label);
+        }
+
         /// <summary>Resolve a registered type</summary>
         /// <typeparam name="TType">Type to resolve</typeparam>
         /// <returns>The resolved type instance</returns>
@@ -48,7 +83,24 @@ namespace Core.DependencyInjection
         /// <returns>The resolved type instance</returns>
         public static TType Resolve<TType>(string label)
         {
-            return Instance.ResolveImpl<TType>(label);
+            return (TType)Resolve(typeof(TType), label);
+        }
+
+        /// <summary>Resolve a registered type</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <returns>The resolved type instance</returns>
+        public static object Resolve(Type type)
+        {
+            return Resolve(type, null);
+        }
+
+        /// <summary>Resolve a registered type</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <param name="label">Registration label (null for default)</param>
+        /// <returns>The resolved type instance</returns>
+        public static object Resolve(Type type, string label)
+        {
+            return Instance.ResolveImpl(type, label);
         }
 
         /// <summary>Resolve all registrations for a type</summary>
@@ -56,7 +108,15 @@ namespace Core.DependencyInjection
         /// <returns>Instances of the resolved types</returns>
         public static IEnumerable<TType> ResolveAll<TType>()
         {
-            return Instance.ResolveAllImpl<TType>();
+            return ResolveAll(typeof(TType)).Cast<TType>();
+        }
+
+        /// <summary>Resolve all registrations for a type</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <returns>Instances of the resolved types</returns>
+        public static IEnumerable<object> ResolveAll(Type type)
+        {
+            return Instance.ResolveAllImpl(type);
         }
 
         /// <summary>Resets the GlobalContainer</summary>
@@ -72,21 +132,30 @@ namespace Core.DependencyInjection
             Instance.AddContainerImpl(container);
         }
 
+        /// <summary>Determines whether a type is registered</summary>
+        /// <param name="type">Type to resolve</param>
+        /// <param name="label">Registration label (null for default)</param>
+        /// <returns>True if the type can be resolved</returns>
+        private bool CanResolveImpl(Type type, string label)
+        {
+            return this.containers.Any(c => c.CanResolve(type, label));
+        }
+
         /// <summary>Resolve a registered type</summary>
-        /// <typeparam name="TType">Type to resolve</typeparam>
+        /// <param name="type">Type to resolve</param>
         /// <param name="label">Registration label (null for default)</param>
         /// <returns>The resolved type instance</returns>
-        private TType ResolveImpl<TType>(string label)
+        private object ResolveImpl(Type type, string label)
         {
             var instance = this.containers
-                .Where(c => c.CanResolve<TType>(label))
-                .Select(c => c.Resolve<TType>(label))
+                .Where(c => c.CanResolve(type, label))
+                .Select(c => c.Resolve(type, label))
                 .SingleOrDefault();
             if (instance == null)
             {
                 throw new DependencyInjectionException(
                     "No registration found for type '{0}'{1} in any of the currently loaded containers.",
-                    typeof(TType).FullName,
+                    type.FullName,
                     label == null ? string.Empty : " with label '{0}'".FormatInvariant(label));
             }
 
@@ -94,13 +163,13 @@ namespace Core.DependencyInjection
         }
 
         /// <summary>Resolve all registrations for a type</summary>
-        /// <typeparam name="TType">Type to resolve</typeparam>
+        /// <param name="type">Type to resolve</param>
         /// <returns>Instances of the resolved types</returns>
-        private IEnumerable<TType> ResolveAllImpl<TType>()
+        private IEnumerable<object> ResolveAllImpl(Type type)
         {
             return this.containers
-                .Where(c => c.CanResolve<TType>())
-                .SelectMany(c => c.ResolveAll<TType>());
+                .Where(c => c.CanResolve(type))
+                .SelectMany(c => c.ResolveAll(type));
         }
 
         /// <summary>Add a container</summary>

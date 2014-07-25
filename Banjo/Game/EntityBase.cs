@@ -52,9 +52,9 @@ namespace Game
             Vector3 direction,
             Vector3 velocity)
             : base(
-            resources.GetSerializedResource<AvatarDefinition>(definition.AvatarId),
-            resources.GetSerializedResource<Material>(definition.MaterialId),
-            definition.Volume)
+                resources.GetSerializedResource<AvatarDefinition>(definition.AvatarId),
+                resources.GetSerializedResource<Material>(definition.MaterialId),
+                definition.Volume)
         {
 #if LOG_VERBOSE
             Log.Trace("Creating entity '{0}' at {1}...", definition.Id, position);
@@ -183,7 +183,7 @@ namespace Game
                     kvp => overrides.ContainsKey(kvp.Key) ?
                         kvp.Value.Merge(overrides[kvp.Key]) : kvp.Value);
 
-            // Merge in global config?
+            //// TODO: Merge in a global config?
 
             // Create the controllers from the controller id/config pairs.
 #if LOG_VERBOSE
