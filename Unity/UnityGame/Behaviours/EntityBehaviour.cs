@@ -60,19 +60,10 @@ namespace Game.Unity.Behaviours
                 return;
             }
 
-            var tileInstanceBehaviour = objectBehaviour as TileInstanceBehaviour;
-            if (tileInstanceBehaviour != null)
-            {
-                var e = new TileCollisionEventArgs(this.Entity, tileInstanceBehaviour.TileInstance);
-                ControllerManager.SendEvent<TileCollisionEventArgs>(eventHandler, this.Entity.Id, e);
-                return;
-            }
-
             Log.Error(
-                "Collider '{0}' has unhandled ObjectBehaviour '{1}' (valid ObjectBehaviours: {2})",
+                "Collider '{0}' has unhandled ObjectBehaviour '{1}'",
                 objectBehaviour.name,
-                objectBehaviour.GetType().FullName,
-                string.Join(", ", new[] { typeof(EntityBehaviour), typeof(TileInstanceBehaviour) }.Select(t => t.FullName).ToArray()));
+                objectBehaviour.GetType().FullName);
         }
     }
 }

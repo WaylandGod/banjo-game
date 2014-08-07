@@ -49,10 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnityGame\UnityGame.csproj">
-      <Project>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</Project>
-      <Name>UnityGame</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UnityResources\UnityResources.csproj">
       <Project>{B95665E0-3D5C-41B4-8D63-BE88E75E6EA1}</Project>
       <Name>UnityResources</Name>
@@ -60,6 +56,10 @@
     <ProjectReference Include="..\..\Banjo\Core\Core.csproj">
       <Project>{779D7875-ADB7-45B6-AADD-658EDFD35081}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityGame\UnityGame.csproj">
+      <Project>{EA2AC103-6AD2-4729-9ACC-891737DE3E58}</Project>
+      <Name>UnityGame</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -57,11 +57,12 @@
     <Compile Include="Game\Programmability\TestControllerA.cs" />
     <Compile Include="Game\TestAvatar.cs" />
     <Compile Include="Game\TestEntity.cs" />
-    <Compile Include="Core\TestExtensions.cs" />
-    <Compile Include="Game\TestTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="Game\Factories\TestEntityFactory.cs" />
+    <Compile Include="Game\TestExtensions.cs" />
+    <Compile Include="Game\Factories\TestWorldFactory.cs" />
+    <Compile Include="Game\TestWorld.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

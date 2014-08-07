@@ -42,6 +42,7 @@
     <Compile Include="DefinitionsSerializationFixture.cs" />
     <Compile Include="EntityFixture.cs" />
     <Compile Include="GameDataFixture.cs" />
+    <Compile Include="VectorsFixture.cs" />
   </ItemGroup>
   <Import Project="$(BuildToolsDir)Common.targets" />
   <ItemGroup>

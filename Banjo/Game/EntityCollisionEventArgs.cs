@@ -27,9 +27,6 @@ namespace Game
         /// <summary>Collider entity</summary>
         public readonly IEntity ColliderEntity;
 
-        /// <summary>Backing field for ColliderDirection</summary>
-        private float? colliderDirection;
-
         /// <summary>Initializes a new instance of the EntityCollisionEventArgs class</summary>
         /// <param name="target">Target entity</param>
         /// <param name="collider">Collider entity</param>
@@ -37,15 +34,6 @@ namespace Game
             : base(target, collider)
         {
             this.ColliderEntity = collider;
-        }
-
-        /// <summary>Gets the direction of the collider's motion along the X and Z axis</summary>
-        public float ColliderDirection
-        {
-            get
-            {
-                return (this.colliderDirection ?? (this.colliderDirection = (float)this.ColliderEntity.Velocity.AngleXZ)).Value;
-            }
         }
     }
 }

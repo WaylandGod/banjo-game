@@ -26,13 +26,9 @@ namespace Game.Data
         [DataMember(IsRequired = true)]
         public string AvatarId { get; set; }
 
-        /// <summary>Gets or sets the material</summary>
+        /// <summary>Gets or sets the mass</summary>
         [DataMember(IsRequired = true)]
-        public string MaterialId { get; set; }
-
-        /// <summary>Gets or sets the volume</summary>
-        [DataMember(IsRequired = true)]
-        public float Volume { get; set; }
+        public double Mass { get; set; }
 
         /// <summary>Gets or sets the controller configurations</summary>
         [DataMember(IsRequired = true, Order = 0)]

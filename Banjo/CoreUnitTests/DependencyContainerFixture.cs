@@ -191,23 +191,44 @@ namespace CoreUnitTests
                 .All(t => instances.Any(i => i.GetType() == t)));
         }
 
-        /// <summary>Class for testing dependency injection</summary>
-        private class TestTypeA1 : ITestTypeA
+        /// <summary>
+        /// Test realizing an instance with array parameters in its constructor
+        /// </summary>
+        [Test]
+        public void RealizeWithArrayParameterConstructor()
         {
-            /// <summary>Gets A</summary>
-            public int A
-            {
-                get { return R.Next(); }
-            }
+            new DependencyContainer()
+                .RegisterType<ITestTypeA, TestTypeA1>("one")
+                .RegisterType<ITestTypeA, TestTypeA2>("two")
+                .RegisterType<TestTypeB, TestTypeB>();
+            
+            var instance = GlobalContainer.Resolve<TestTypeB>();
+            Assert.IsNotNull(instance);
+            Assert.IsNotNull(instance.A1);
+            Assert.IsInstanceOf<TestTypeA1>(instance.A1);
+            Assert.IsNotNull(instance.As);
+            Assert.AreEqual(2, instance.As.Length);
+            Assert.IsInstanceOf<TestTypeA1>(instance.As[0]);
+            Assert.IsInstanceOf<TestTypeA2>(instance.As[1]);
         }
 
-        /// <summary>Class for testing dependency injection</summary>
+        private class TestTypeA1 : ITestTypeA
+        {
+            public int A { get { return R.Next(); } }
+        }
+
         private class TestTypeA2 : ITestTypeA
         {
-            /// <summary>Gets A</summary>
-            public int A
+            public int A { get { return R.Next(); } }
+        }
+
+        private class TestTypeB
+        {
+            public readonly ITestTypeA A1;
+            public readonly ITestTypeA[] As;
+            public TestTypeB(ITestTypeA testA, ITestTypeA[] testAs)
             {
-                get { return R.Next(); }
+                this.A1 = testA; this.As = testAs;
             }
         }
     }

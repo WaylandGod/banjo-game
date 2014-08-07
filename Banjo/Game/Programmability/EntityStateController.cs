@@ -8,13 +8,13 @@ using System;
 using System.Linq;
 using Core;
 using Core.Programmability;
-using Game;
 
 namespace Game.Programmability
 {
-    /// <summary>Controllers the target's state using conditions provided by other controllers</summary>
+    /// <summary>Controls the target's state using conditions provided by other controllers</summary>
+    /// <remarks>Checks are loaded from all controller instance implementing IEntityStateCheckProvider</remarks>
     [Controller(EntityStateController.ControllerId)]
-    public class EntityStateController : EntityController
+    public sealed class EntityStateController : EntityController
     {
         /// <summary>Controller identifier</summary>
         public const string ControllerId = "controller.entitystates";
@@ -30,20 +30,16 @@ namespace Game.Programmability
         /// <summary>Gets the list of state checks from all state check providing controllers</summary>
         private EntityStateCheck[] StateChecks
         {
-            get
-            {
-                return this.stateChecks ?? (this.stateChecks = this.GetStateChecks());
-            }
+            get { return this.stateChecks ?? (this.stateChecks = this.GetStateChecks()); }
         }
 
         /// <summary>Update each frame</summary>
         /// <param name="e">Frame event data</param>
-        [EventHandler]
         public override void OnUpdate(FrameEventArgs e)
         {
             foreach (var check in this.StateChecks)
             {
-                if (check.Condition(this.Target) == true)
+                if (check.Condition(this.Target))
                 {
                     if (this.Target.State != check.State)
                     {

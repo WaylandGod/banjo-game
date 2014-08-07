@@ -4,10 +4,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Core;
+using Core.Factories;
+using Game.Data;
 
 namespace Game.Factories
 {
     /// <summary>World factory interface</summary>
-    public interface IWorldFactory : IFactory<IWorld> { }
+    public interface IWorldFactory : IFactory<IWorld>
+    {
+        /// <summary>Creates an instance of IWorld</summary>
+        /// <param name="definition">Level definition</param>
+        /// <returns>The created IWorld instance</returns>
+        IWorld Create(LevelDefinition definition);
+    }
 }

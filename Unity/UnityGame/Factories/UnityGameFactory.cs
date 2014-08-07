@@ -5,11 +5,11 @@
 //-----------------------------------------------------------------------
 
 using System;
-using Core.Input;
 using Core.Resources.Management;
 using Game;
 using Game.Data;
 using Game.Factories;
+using Game.Input;
 using Game.Unity;
 
 namespace Game.Unity.Factories

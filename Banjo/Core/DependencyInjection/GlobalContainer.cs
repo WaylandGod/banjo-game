@@ -64,9 +64,9 @@ namespace Core.DependencyInjection
         /// <param name="type">Type to resolve</param>
         /// <param name="label">Registration label (null for default)</param>
         /// <returns>True if the type can be resolved</returns>
-        public static bool CanResolve(Type t, string label)
+        public static bool CanResolve(Type type, string label)
         {
-            return Instance.CanResolveImpl(t, label);
+            return Instance.CanResolveImpl(type, label);
         }
 
         /// <summary>Resolve a registered type</summary>
@@ -154,7 +154,7 @@ namespace Core.DependencyInjection
             if (instance == null)
             {
                 throw new DependencyInjectionException(
-                    "No registration found for type '{0}'{1} in any of the currently loaded containers.",
+                    "No registration found for type '{0}'(\"{1}\") in any of the currently loaded containers.",
                     type.FullName,
                     label == null ? string.Empty : " with label '{0}'".FormatInvariant(label));
             }

@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using Core.Input;
 
 namespace Core.Programmability
 {
@@ -20,9 +19,5 @@ namespace Core.Programmability
 
         /// <summary>Gets the configuration</summary>
         IConfig Config { get; }
-
-        /// <summary>Called when input events occur</summary>
-        /// <param name="e">Input event args</param>
-        void OnInput(InputEventArgs e);
     }
 }

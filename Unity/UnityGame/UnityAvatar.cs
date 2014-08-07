@@ -117,17 +117,17 @@ namespace Game.Unity
         }
 
         /// <summary>Gets or sets the position</summary>
-        public override global::Core.Vector3 Position
+        public override Vector3D Position
         {
-            get { return this.GameObject.transform.position.ToGameVector3(); }
-            set { this.GameObject.transform.localPosition = value.ToUnityVector3(); }
+            get { return this.GameObject.transform.position; }
+            set { this.GameObject.transform.localPosition = value; }
         }
 
         /// <summary>Gets or sets the direction</summary>
-        public override global::Core.Vector3 Direction
+        public override Vector3D Direction
         {
-            get { return this.GameObject.transform.rotation.eulerAngles.ToGameVector3(); }
-            set { this.GameObject.transform.rotation = Quaternion.Euler(value.ToUnityVector3()); }
+            get { return this.GameObject.transform.rotation.eulerAngles; }
+            set { this.GameObject.transform.rotation = Quaternion.Euler(value); }
         }
 
         /// <summary>Gets or sets the avatar's Unity layer</summary>

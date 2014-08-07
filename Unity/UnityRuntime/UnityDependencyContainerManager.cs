@@ -6,13 +6,14 @@
 
 using Core;
 using Core.DependencyInjection;
-using Core.Input;
+using Core.Factories;
 using Core.Programmability;
 using Core.Resources.Management;
 using Core.Unity;
-using Core.Unity.Input;
 using Game;
 using Game.Factories;
+using Game.Input;
+using Game.Unity.Input;
 using Game.Programmability;
 using Game.Unity.Factories;
 using Unity.Resources.Management;
@@ -33,20 +34,20 @@ namespace Unity.Runtime
             Container = new DependencyContainer();
             Container.RegisterSingleton<ILogger, GenericAsyncLogger<DebugConsoleLogger>>("Unity Async Debug Logger");
             
-            Container.RegisterType<IResourceLoader, TextAssetResourceLoader>("Unity TextAsset Loader");
-            Container.RegisterType<IResourceLoader, PrefabAssetResourceLoader>("Unity Prefab Loader");
+            Container.RegisterSingleton<IResourceLoader, TextAssetResourceLoader>("Unity TextAsset Loader");
+            Container.RegisterSingleton<IResourceLoader, PrefabAssetResourceLoader>("Unity Prefab Loader");
             
-            Container.RegisterType<IAvatarFactory, UnityAvatarFactory>();
-            Container.RegisterType<IEntityFactory, UnityEntityFactory>();
-            Container.RegisterType<ITileFactory, UnityTileFactory>();
-            Container.RegisterType<IWorldFactory, UnityWorldFactory>();
-            Container.RegisterType<IGameFactory, UnityGameFactory>();
+            Container.RegisterSingleton<IAvatarFactory, UnityAvatarFactory>();
+            Container.RegisterSingleton<IEntityFactory, UnityEntityFactory>();
+            Container.RegisterSingleton<IWorldFactory, UnityWorldFactory>();
+            Container.RegisterSingleton<IGameFactory, UnityGameFactory>();
 
-            Container.RegisterType<IControllerFactory, ReflectionControllerFactory>();
+            Container.RegisterSingleton<IControllerFactory, ReflectionControllerFactory<IEntity>>("Entity Controller Factory");
+            Container.RegisterSingleton<IControllerFactory, ReflectionControllerFactory<IWorld>>("World Controller Factory");
             Container.RegisterSingleton<IControllerManager, ControllerManager>();
 
             Container.RegisterSingleton<IInputManager, InputManager>();
-            Container.RegisterSingleton<IInputSource, UnityInputManagerSource>();
+            Container.RegisterSingleton<IInputSource, UnityInputSource>();
         }
     }
 }

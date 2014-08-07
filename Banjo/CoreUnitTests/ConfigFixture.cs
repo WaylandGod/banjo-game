@@ -58,6 +58,26 @@ namespace CoreUnitTests
 
         /// <summary>Test getting a raw value</summary>
         [Test]
+        public void GetDefaultIntValue()
+        {
+            var defaultvalue = 24;
+            var config = this.CreateConfigWithValues("foo", "42");
+            var value = config.GetValue<int>("bar", defaultvalue);
+            Assert.AreEqual(defaultvalue, value);
+        }
+
+        /// <summary>Test getting a raw value</summary>
+        [Test]
+        public void GetDefaultRawValue()
+        {
+            var defaultValue = "24";
+            var config = this.CreateConfigWithValues("foo", "42");
+            var value = config.GetValue("bar", defaultValue);
+            Assert.AreEqual(defaultValue, value);
+        }
+
+        /// <summary>Test getting a default</summary>
+        [Test]
         public void GetRawValue()
         {
             var expected = Guid.NewGuid().ToString();

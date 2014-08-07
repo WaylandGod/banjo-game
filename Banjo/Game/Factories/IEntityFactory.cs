@@ -4,7 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Core;
+using Core.Factories;
+using Core.Data;
 using Game.Data;
 
 namespace Game.Factories
@@ -14,7 +15,7 @@ namespace Game.Factories
     {
         /// <summary>Creates an instance of IEntity</summary>
         /// <param name="definition">Entity definition</param>
-        /// <param name="controllers">Additional controllers</param>
+        /// <param name="controllers">Additional controllers (optional)</param>
         /// <param name="position">Initial position</param>
         /// <param name="direction">Initial direction</param>
         /// <param name="velocity">Initial velocity</param>
@@ -22,8 +23,8 @@ namespace Game.Factories
         IEntity Create(
             EntityDefinition definition,
             ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity);
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity);
     }
 }

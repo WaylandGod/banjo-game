@@ -4,10 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Core.Input;
+using Core.Factories;
 using Core.Resources.Management;
 using Game.Data;
 using Game.Factories;
+using Game.Input;
 
 namespace Game.Factories
 {

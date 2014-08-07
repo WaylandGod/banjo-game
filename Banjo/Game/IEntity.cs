@@ -32,13 +32,13 @@ namespace Game
         IAvatar Avatar { get; }
 
         /// <summary>Gets or sets the direction</summary>
-        Vector3 Direction { get; set; }
+        Vector3D Direction { get; set; }
 
         /// <summary>Gets or sets the speed (in units/second)</summary>
-        new Vector3 Velocity { get; set; }
+        new Vector3D Velocity { get; set; }
 
         /// <summary>Gets or sets the position</summary>
-        new Vector3 Position { get; set; }
+        new Vector3D Position { get; set; }
 
         /// <summary>Gets or sets the state</summary>
         string State { get; set; }

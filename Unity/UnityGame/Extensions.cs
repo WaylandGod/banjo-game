@@ -4,30 +4,16 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Core;
 using Core.Unity;
 using Game.Unity.Behaviours;
+using UnityEngine;
 
 namespace Game.Unity
 {
     /// <summary>Unity game extensions</summary>
     public static class Extensions
     {
-        /// <summary>Creates a UnityEngine.Vector3 from a Game.Vector3</summary>
-        /// <param name="vector">Vector to convert</param>
-        /// <returns>The UnityEngine.Vector3</returns>
-        public static UnityEngine.Vector3 ToUnityVector3(this Core.Vector3 vector)
-        {
-            return new UnityEngine.Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);
-        }
-
-        /// <summary>Creates a Game.Vector3 from a UnityEngine.Vector3</summary>
-        /// <param name="vector">Vector to convert</param>
-        /// <returns>The Game.Vector3</returns>
-        public static Core.Vector3 ToGameVector3(this UnityEngine.Vector3 vector)
-        {
-            return new Core.Vector3(vector.x, vector.y, vector.z);
-        }
-
         /// <summary>Adds an ObjectBehaviour to the UnityAvatar</summary>
         /// <typeparam name="TBehaviour">ObjectBehaviour type</typeparam>
         /// <param name="avatar">Unity avatar</param>

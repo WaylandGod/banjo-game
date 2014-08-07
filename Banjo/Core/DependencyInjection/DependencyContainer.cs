@@ -318,11 +318,17 @@ namespace Core.DependencyInjection
                     }
 
                     // Find a valid constructor using currently registered types
+                    // If multiple are present, take the one with the most resolvable parameters.
                     this.constructor = this.constructor ??
-                        this.ToType.GetConstructors()
+                    this.ToType.GetConstructors()
                         .Where(c =>
+                            // No recursive parameter types
                             !c.GetParameters().Any(p => p.ParameterType == this.FromType) &&
-                            c.GetParameters().All(p => GlobalContainer.AllContainers.Any(dc => dc.typeRegistry.ContainsKey(p.ParameterType))))
+                            // All parameters (or their element types) must be resolvable
+                        c.GetParameters().All(p =>
+                                GlobalContainer.AllContainers.Any(dc =>
+                                    dc.typeRegistry.ContainsKey(
+                                    p.ParameterType.GetElementType() ?? p.ParameterType))))
                         .OrderByDescending(c => c.GetParameters().Length)
                         .FirstOrDefault();
                     if (this.constructor == null)
@@ -335,8 +341,7 @@ namespace Core.DependencyInjection
                     
                     // Resolve the parameters and invoke the constructor
                     var parameters = this.constructor.GetParameters()
-                        .Select(p => GlobalContainer.AllContainers.First(dc => dc.CanResolve(p.ParameterType)).Resolve(p.ParameterType))
-                        .Cast<object>()
+                        .Select(p => ResolveParameter(p.ParameterType))
                         .ToArray();
                     var instance = this.constructor.Invoke(parameters);
 
@@ -349,6 +354,25 @@ namespace Core.DependencyInjection
                     // Return the realized instance
                     return instance;
                 }
+            }
+
+            /// <summary>Resolves the parameter type</summary>
+            /// <remarks>Handles resolving arrays by their element type</remarks>
+            /// <param name="type">Type of the parameter</param>
+            /// <returns>The resolved parameter</returns>
+            private static object ResolveParameter(Type type)
+            {
+                if (type.IsArray)
+                {
+                    type = type.GetElementType();
+                    var instances = GlobalContainer.AllContainers.Where(dc => dc.CanResolve(type))
+                        .SelectMany(dc => dc.ResolveAll(type)).ToArray();
+                    var typedArray = Array.CreateInstance(type, instances.Length);
+                    Array.Copy(instances, typedArray, instances.Length);
+                    return (object)typedArray;
+                }
+
+                return GlobalContainer.AllContainers.First(dc => dc.CanResolve(type)).Resolve(type);
             }
         }
     }

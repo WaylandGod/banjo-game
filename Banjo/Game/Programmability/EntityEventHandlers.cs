@@ -4,31 +4,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core;
-using Core.Input;
-using Core.Programmability;
-
 namespace Game.Programmability
 {
     /// <summary>Entity controller event handler names</summary>
     public static class EntityEventHandlers
     {
-        /// <summary>OnUpdate event handler name</summary>
-        public const string OnUpdate = "OnUpdate";
-
-        /// <summary>OnInput event handler name</summary>
-        public const string OnInput = "OnInput";
-
-        /// <summary>OnCollisionEnter event handler name</summary>
-        public const string OnCollisionEnter = "OnCollisionEnter";
-
-        /// <summary>OnCollisionContinue event handler name</summary>
-        public const string OnCollisionContinue = "OnCollisionContinue";
-
-        /// <summary>OnCollisionExit event handler name</summary>
-        public const string OnCollisionExit = "OnCollisionExit";
+        public const string OnStart = "Entity.OnStart";
+        public const string OnUpdate = "Entity.OnUpdate";
+        public const string OnInput = "Entity.OnInput";
+        public const string OnCollisionEnter = "Entity.OnCollisionEnter";
+        public const string OnCollisionContinue = "Entity.OnCollisionContinue";
+        public const string OnCollisionExit = "Entity.OnCollisionExit";
+        public const string OnDrawUI = "Entity.OnDrawUI";
     }
 }

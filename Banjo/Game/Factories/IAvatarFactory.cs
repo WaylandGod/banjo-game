@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Core;
+using Core.Factories;
 
 namespace Game.Factories
 {

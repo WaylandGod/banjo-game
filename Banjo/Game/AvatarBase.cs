@@ -56,10 +56,10 @@ namespace Game
         public virtual bool Visible { get; set; }
 
         /// <summary>Gets or sets the position</summary>
-        public virtual Vector3 Position { get; set; }
+        public virtual Vector3D Position { get; set; }
 
         /// <summary>Gets or sets the direction</summary>
-        public virtual Vector3 Direction { get; set; }
+        public virtual Vector3D Direction { get; set; }
 
         /// <summary>Gets the clipping distance</summary>
         public abstract float ClippingDistance { get; }

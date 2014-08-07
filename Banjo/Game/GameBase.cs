@@ -20,11 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Input;
 using Core.Programmability;
 using Core.Resources.Management;
 using Game.Data;
 using Game.Factories;
+using Game.Input;
 
 namespace Game
 {
@@ -82,6 +82,18 @@ namespace Game
 
         /// <summary>Gets the current world</summary>
         public IWorld World { get; private set; }
+
+        /// <summary>Gets a value indicating whether the current game is finished</summary>
+        /// <remarks>Completed and Failed properties should be used to determine what to do next</remarks>
+        public bool Done { get { return this.Completed || this.Failed; } }
+
+        /// <summary>Gets a value indicating whether the objective has been completed</summary>
+        /// <remarks>When true the game should exit play and enter level results UI</remarks>
+        public bool Completed { get { return this.World.Objectives.All(o => o.Completed); } }
+
+        /// <summary>Gets a value indicating whether the objective has failed</summary>
+        /// <remarks>When true the game should reset the level</remarks>
+        public bool Failed { get { return this.World.Objectives.Any(o => o.Failed); } }
 
         /// <summary>Gets the world definitions</summary>
         protected IEnumerable<LevelDefinition> LevelDefinitions

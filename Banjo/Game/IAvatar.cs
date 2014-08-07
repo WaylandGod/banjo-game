@@ -43,10 +43,10 @@ namespace Game
         bool Visible { get; set; }
 
         /// <summary>Gets or sets the position</summary>
-        Vector3 Position { get; set; }
+        Vector3D Position { get; set; }
 
-        /// <summary>Gets or sets the direction</summary>
-        Vector3 Direction { get; set; }
+        /// <summary>Gets or sets the direction as a vector of euler angles</summary>
+        Vector3D Direction { get; set; }
 
         /// <summary>Gets the clipping distance</summary>
         float ClippingDistance { get; }

@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Core.Factories;
 using Core.Resources.Management;
 using Game.Data;
 

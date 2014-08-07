@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Data;
 using Core.DependencyInjection;
-using Core.Input;
+using Core.Factories;
+using Game.Input;
 using Core.Programmability;
 using Core.Resources.Management;
 using Game;
@@ -28,7 +30,7 @@ namespace GameUnitTests
     public class EntityFixture
     {
         /// <summary>Random number generator for testing</summary>
-        private static readonly Random R = new Random();
+        private static readonly System.Random R = new System.Random();
 
         /// <summary>Test controller manager</summary>
         private IControllerManager controllers;
@@ -40,7 +42,10 @@ namespace GameUnitTests
         private IAvatarFactory avatarFactory;
 
         /// <summary>Test entity controller factory</summary>
-        private IControllerFactory controllerFactory;
+        private IControllerFactory entityControllerFactory;
+
+        /// <summary>Test controller factories</summary>
+        private IControllerFactory[] controllerFactories;
 
         /// <summary>Per-test initialization</summary>
         [SetUp]
@@ -49,7 +54,10 @@ namespace GameUnitTests
             this.resources = new ResourceLibrary();
             this.controllers = new ControllerManager();
             this.avatarFactory = new TestAvatarFactory(this.resources);
-            this.controllerFactory = new ReflectionControllerFactory(this.controllers, this.resources);
+            this.controllerFactories = new IControllerFactory[]
+            {
+                this.entityControllerFactory = new ReflectionControllerFactory<IEntity>(this.controllers, this.resources),
+            };
             new DependencyContainer()
                 .RegisterSingleton<IControllerManager, ControllerManager>()
                 .RegisterSingleton<IInputManager, InputManager>();
@@ -77,11 +85,11 @@ namespace GameUnitTests
                 entityDefinition,
                 this.resources,
                 this.avatarFactory,
-                this.controllerFactory,
+                new[] { this.entityControllerFactory },
                 new ControllerConfig[0],
-                Vector3.Zero,
-                Vector3.Zero,
-                Vector3.Zero);
+                Vector3D.Zero,
+                Vector3D.Zero,
+                Vector3D.Zero);
             Assert.IsNotNull(entity);
         }
 
@@ -93,11 +101,11 @@ namespace GameUnitTests
             var entity = new TestEntity(
                 this.resources,
                 this.avatarFactory,
-                this.controllerFactory,
+                new[] { this.entityControllerFactory },
                 new ControllerConfig[0],
                 position,
-                Vector3.Zero,
-                Vector3.Zero);
+                Vector3D.Zero,
+                Vector3D.Zero);
             Assert.IsNotNull(entity);
             Assert.AreEqual(position, entity.Avatar.Position);
         }
@@ -137,11 +145,11 @@ namespace GameUnitTests
                 entityDefinition,
                 this.resources,
                 this.avatarFactory,
-                this.controllerFactory,
+                this.controllerFactories,
                 controllers,
-                Vector3.Zero,
-                Vector3.Zero,
-                Vector3.Zero);
+                Vector3D.Zero,
+                Vector3D.Zero,
+                Vector3D.Zero);
             Assert.IsTrue(entity.Controllers.All(c => c.Target == entity));
             Assert.IsFalse(entity.Controllers.Any(c => c.Id.ResourceId.StartsWith("controller.testB") && c.Config.GetValue("Bar") == "Don't Panic"));
             Assert.IsTrue(entity.Controllers.Any(c => c.Id.ResourceId.StartsWith("controller.testB") && c.Config.GetValue("Foo") == "42"));

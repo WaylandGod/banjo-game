@@ -4,8 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using Core;
-using Core.Input;
+using Game.Input;
 using Core.Programmability;
 
 namespace Game.Programmability
@@ -15,6 +17,12 @@ namespace Game.Programmability
     {
         /// <summary>Gets the target</summary>
         new IEntity Target { get; }
+
+        /// <summary>Gets the controller's input mappings</summary>
+        IDictionary<IInputMapping, MappedInputHandler> InputMappings { get; }
+
+        /// <summary>Initializes the controller</summary>
+        void OnStart(EventArgs e);
 
         /// <summary>Called on each frame update</summary>
         /// <param name="e">Frame event args</param>
@@ -31,5 +39,8 @@ namespace Game.Programmability
         /// <summary>Called when the target stops colliding with an entity or tile</summary>
         /// <param name="e">Collision event args</param>
         void OnCollisionExit(CollisionEventArgs e);
+
+        /// <summary>Called when it is time to draw user interface elements</summary>
+        void OnDrawUI(EventArgs e);
     }
 }

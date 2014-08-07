@@ -25,13 +25,10 @@ namespace Game
     public interface ICollidable
     {
         /// <summary>Gets the position</summary>
-        Vector3 Position { get; }
-
-        /// <summary>Gets the material</summary>
-        Material Material { get; }
+        Vector3D Position { get; }
 
         /// <summary>Gets the mass</summary>
-        float Mass { get; }
+        double Mass { get; set; }
 
         /// <summary>Gets the clipping distance</summary>
         /// <remarks>
@@ -41,6 +38,6 @@ namespace Game
         float ClippingDistance { get; }
 
         /// <summary>Gets the velocity (in units/second)</summary>
-        Vector3 Velocity { get; }
+        Vector3D Velocity { get; }
     }
 }

@@ -4,7 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Core;
+using Core.Data;
+using Core.Factories;
 using Core.Resources.Management;
 using Game.Data;
 
@@ -14,21 +15,18 @@ namespace Game.Factories
     public abstract class EntityFactoryBase : ResourceFactoryBase<IEntity>, IEntityFactory
     {
         /// <summary>Initializes a new instance of the EntityFactoryBase class</summary>
-        /// <param name="resources">Resource library</param>
-        /// <param name="avatarFactory">Avatar factory</param>
-        /// <param name="controllerFactory">Controller factory</param>
-        protected EntityFactoryBase(IResourceLibrary resources, IAvatarFactory avatarFactory, IControllerFactory controllerFactory)
+        protected EntityFactoryBase(IResourceLibrary resources, IAvatarFactory avatarFactory, IControllerFactory[] controllerFactories)
             : base(resources)
         {
             this.AvatarFactory = avatarFactory;
-            this.ControllerFactory = controllerFactory;
+            this.ControllerFactories = controllerFactories;
         }
 
         /// <summary>Gets the avatar factory</summary>
         protected IAvatarFactory AvatarFactory { get; private set; }
 
-        /// <summary>Gets the controller factory</summary>
-        protected IControllerFactory ControllerFactory { get; private set; }
+        /// <summary>Gets the controller factories</summary>
+        protected IControllerFactory[] ControllerFactories { get; private set; }
 
         /// <summary>Creates an instance of IEntity</summary>
         /// <param name="definition">Entity definition</param>
@@ -37,6 +35,11 @@ namespace Game.Factories
         /// <param name="direction">Initial direction</param>
         /// <param name="velocity">Initial velocity</param>
         /// <returns>The created IEntity instance</returns>
-        public abstract IEntity Create(EntityDefinition definition, ControllerConfig[] controllers, Vector3 position, Vector3 direction, Vector3 velocity);
+        public abstract IEntity Create(
+            EntityDefinition definition,
+            ControllerConfig[] controllers,
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity);
     }
 }

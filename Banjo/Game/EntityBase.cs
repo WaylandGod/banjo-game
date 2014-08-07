@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Core;
+using Core.Data;
+using Core.Factories;
 using Core.Resources.Management;
 using Game.Data;
 using Game.Factories;
@@ -30,14 +32,14 @@ namespace Game
 {
     /// <summary>Base class for IEntity implementations</summary>
     /// <remarks>An entity is any interactive/dynamic object in a game</remarks>
-    public abstract class EntityBase : ObjectBase, IEntity
+    public abstract class EntityBase : ObjectBase<IEntityController>, IEntity
     {
         /// <summary>Initializes a new instance of the EntityBase class</summary>
-        /// <param name="definition">Entity definition</param>
+        /// <param name="definition">Entity definition (includes primary controllers)</param>
         /// <param name="resources">Resource library</param>
         /// <param name="avatarFactory">Avatar factory</param>
-        /// <param name="controllerFactory">Controller factory</param>
-        /// <param name="controllers">Additional controllers</param>
+        /// <param name="controllerFactories">Controller factories</param>
+        /// <param name="customControllers">Additional controllers and overrides</param>
         /// <param name="position">Initial position</param>
         /// <param name="direction">Initial direction</param>
         /// <param name="velocity">Initial velocity</param>
@@ -46,15 +48,17 @@ namespace Game
             EntityDefinition definition,
             IResourceLibrary resources,
             IAvatarFactory avatarFactory,
-            IControllerFactory controllerFactory,
-            ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity)
-            : base(
-                resources.GetSerializedResource<AvatarDefinition>(definition.AvatarId),
-                resources.GetSerializedResource<Material>(definition.MaterialId),
-                definition.Volume)
+            IControllerFactory[] controllerFactories,
+            ControllerConfig[] customControllers,
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity)
+        : base(
+            resources.GetSerializedResource<AvatarDefinition>(definition.AvatarId),
+            definition.Mass,
+            controllerFactories,
+            definition.Controllers,
+            customControllers)
         {
 #if LOG_VERBOSE
             Log.Trace("Creating entity '{0}' at {1}...", definition.Id, position);
@@ -64,8 +68,6 @@ namespace Game
             this.Position = position;
             this.Direction = direction;
             this.Velocity = velocity;
-
-            this.CreateControllers(definition.Controllers, controllers ?? new ControllerConfig[0], controllerFactory);
 
 #if LOG_VERBOSE
             Log.Trace("Created '{0}' at {1}.", this.Avatar.Id, this.Avatar.Position);
@@ -79,21 +81,21 @@ namespace Game
         public float ClippingDistance { get { return this.Avatar.ClippingDistance; } }
 
         /// <summary>Gets or sets the position</summary>
-        public Vector3 Position
+        public Vector3D Position
         {
             get { return this.Avatar.Position; }
             set { this.Avatar.Position = value; }
         }
 
         /// <summary>Gets or sets the heading</summary>
-        public Vector3 Direction
+        public Vector3D Direction
         {
             get { return this.Avatar.Direction; }
             set { this.Avatar.Direction = value; }
         }
 
         /// <summary>Gets or sets the speed (in units/second)</summary>
-        public Vector3 Velocity { get; set; }
+        public Vector3D Velocity { get; set; }
 
         /// <summary>Gets or sets the state</summary>
         public string State
@@ -116,9 +118,6 @@ namespace Game
                 this.Avatar.CurrentState = this.Avatar.States[value];
             }
         }
-
-        /// <summary>Gets the object's controllers</summary>
-        public IEntityController[] Controllers { get; private set; }
 
         /// <summary>Dispose of native/managed resources</summary>
         public void Dispose()
@@ -143,56 +142,6 @@ namespace Game
                 this.Avatar.Dispose();
                 this.Avatar = null;
             }
-        }
-
-        /// <summary>Creates controllers for the object</summary>
-        /// <param name="builtInControllers">Controller configurations from the definition</param>
-        /// <param name="controllers">Additional controller configurations/setting overrides</param>
-        /// <param name="controllerFactory">Controller factory</param>
-        protected void CreateControllers(
-            ControllerConfig[] builtInControllers,
-            ControllerConfig[] controllers,
-            IControllerFactory controllerFactory)
-        {
-            if (builtInControllers == null) throw new ArgumentNullException("builtInControllers");
-            if (controllers == null) throw new ArgumentNullException("controllers");
-
-            // Find the additional controllers that are actually
-            // overrides for built-in controllers' settings
-            var overrides = controllers
-                .Where(cc =>
-                    builtInControllers.Any(bicc => cc.ControllerId == bicc.ControllerId))
-                .ToDictionary(
-                    cc => cc.ControllerId,
-                    cc => new DictionaryConfig(cc.Settings));
-
-            // Create a dictionary of controller configs keyed by their ids
-            // Start with the built-in controllers, then the non-overrides.
-            // Next, merge in settings overrides where available.
-            var controllersToCreate = builtInControllers
-                .ToDictionary(
-                    cc => cc.ControllerId,
-                    cc => new DictionaryConfig(cc.Settings))
-                .Concat(controllers
-                    .Where(cc => !overrides.ContainsKey(cc.ControllerId))
-                    .ToDictionary(
-                        cc => cc.ControllerId,
-                        cc => new DictionaryConfig(cc.Settings)))
-                .ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => overrides.ContainsKey(kvp.Key) ?
-                        kvp.Value.Merge(overrides[kvp.Key]) : kvp.Value);
-
-            //// TODO: Merge in a global config?
-
-            // Create the controllers from the controller id/config pairs.
-#if LOG_VERBOSE
-            Log.Trace("Entity<{0}>[{1}].CreateControllers - Creating {2} controllers: [{3}]", this.GetType().FullName, this.Id, controllersToCreate.Count, string.Join(", ", controllersToCreate.Keys.ToArray()));
-#endif
-            this.Controllers = controllersToCreate
-                .Select(kvp =>
-                    controllerFactory.Create(kvp.Key, kvp.Value, this))
-                .ToArray();
         }
     }
 }

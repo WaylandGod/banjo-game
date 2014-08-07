@@ -42,13 +42,11 @@ namespace GameUnitTests
                     new AvatarState { Id = 1, Name = "Walk" },
                 },
             };
-            var eyemanMaterial = new Material { Id = "material.eyeman", Mass = 1, Round = true };
             var eyemanEntity = new EntityDefinition
             {
                 Id = "entity.eyeman",
                 AvatarId = eyemanAvatar.Id,
-                MaterialId = eyemanMaterial.Id,
-                Volume = 1,
+                Mass = 1,
                 Controllers = new[]
                 {
                     new ControllerConfig
@@ -57,36 +55,6 @@ namespace GameUnitTests
                         Settings = { { "Foo", "42" }, { "Bar", "Don't Panic" } }
                     },
                 },
-            };
-
-            var solidMaterial = new Material { Id = "material.solid", Mass = 10, Round = false };
-            var floorAvatar = new AvatarDefinition
-            {
-                Id = "avatar.floor",
-                ResourceId = "avatar.prefab.floor",
-                DefaultState = "Idle",
-                States = new[] { new AvatarState { Id = 0, Name = "Idle" } },
-            };
-            var floorTile = new TileDefinition
-            {
-                Id = "tile.floor",
-                AvatarId = floorAvatar.Id,
-                MaterialId = solidMaterial.Id,
-                Volume = 1,
-            };
-            var wallAvatar = new AvatarDefinition
-            {
-                Id = "avatar.wall",
-                ResourceId = "avatar.prefab.wall",
-                DefaultState = "Idle",
-                States = new[] { new AvatarState { Id = 0, Name = "Idle" } },
-            };
-            var wallTile = new TileDefinition
-            {
-                Id = "tile.wall",
-                AvatarId = wallAvatar.Id,
-                MaterialId = solidMaterial.Id,
-                Volume = 4,
             };
 
             var level = new LevelDefinition
@@ -98,7 +66,7 @@ namespace GameUnitTests
                 {
                     new LevelDefinition.EntityCollection.Entry
                     {
-                        EntityId = eyemanEntity.Id, Direction = Vector3.Zero, Position = new Vector3(4, 0, 4),
+                        EntityId = eyemanEntity.Id, Direction = Vector3D.Zero, Position = new Vector3D(4f, 0f, 4f),
                         Controllers = new[]
                         {
                             new ControllerConfig
@@ -109,35 +77,6 @@ namespace GameUnitTests
                         },
                     },
                 },
-                Tiles = { floorTile.Id, wallTile.Id, },
-                Map =
-                {
-                    Breadth = 16,
-                    Depth = 16,
-                    TileSpacing = 6,
-                    Tiles = new int[]
-                    {
-                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-
-                        1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                    },
-                }
             };
 
             var game = new GameDefinition
@@ -155,7 +94,7 @@ namespace GameUnitTests
 
             var resources = new IResource[]
             {
-                eyemanAvatar, eyemanMaterial, eyemanEntity, solidMaterial, floorAvatar, floorTile, wallAvatar, wallTile, level, game
+                eyemanAvatar, eyemanEntity, level, game
             };
             var resourcesXml = string.Join("\n\n\n", resources.Select(res => res.ToString()).ToArray());
             

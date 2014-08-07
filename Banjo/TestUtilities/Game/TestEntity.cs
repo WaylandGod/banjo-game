@@ -6,6 +6,9 @@
 
 using System.Collections.Generic;
 using Core;
+using Core.Data;
+using Core.Factories;
+using Core.Programmability;
 using Core.Resources.Management;
 using Game;
 using Game.Data;
@@ -18,41 +21,26 @@ namespace TestUtilities.Game
     public class TestEntity : EntityBase, IEntity
     {
         /// <summary>Initializes a new instance of the TestEntity class</summary>
-        /// <param name="library">Resource library</param>
-        /// <param name="avatarFactory">Avatar factory</param>
-        /// <param name="controllerFactory">Controller factory</param>
-        /// <param name="controllers">Additional controllers</param>
-        /// <param name="position">Initial position</param>
-        /// <param name="direction">Initial direction</param>
-        /// <param name="velocity">Initial velocity</param>
         public TestEntity(
             IResourceLibrary library,
             IAvatarFactory avatarFactory,
-            IControllerFactory controllerFactory,
+            IControllerFactory[] controllerFactories,
             ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity)
-            : this(library.GetResource<EntityDefinition>(GameDataHelper.DeepCreateTestEntityDefinition(library)), library, avatarFactory, controllerFactory, controllers, position, direction, velocity) { }
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity)
+            : this(library.GetResource<EntityDefinition>(GameDataHelper.DeepCreateTestEntityDefinition(library)), library, avatarFactory, controllerFactories, controllers, position, direction, velocity) { }
 
         /// <summary>Initializes a new instance of the TestEntity class</summary>
-        /// <param name="definition">Entity definition</param>
-        /// <param name="library">Resource library</param>
-        /// <param name="avatarFactory">Avatar factory</param>
-        /// <param name="controllerFactory">Controller factory</param>
-        /// <param name="controllers">Additional controllers</param>
-        /// <param name="position">Initial position</param>
-        /// <param name="direction">Initial direction</param>
-        /// <param name="velocity">Initial velocity</param>
         public TestEntity(
             EntityDefinition definition,
             IResourceLibrary library,
             IAvatarFactory avatarFactory,
-            IControllerFactory controllerFactory,
+            IControllerFactory[] controllerFactories,
             ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity)
-            : base(definition, library, avatarFactory, controllerFactory, controllers, position, direction, velocity) { }
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity)
+            : base(definition, library, avatarFactory, controllerFactories, controllers, position, direction, velocity) { }
     }
 }

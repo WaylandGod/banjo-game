@@ -34,7 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CollisionEventArgs.cs" />
     <Compile Include="Data\Element.cs" />
     <Compile Include="EntityCollisionEventArgs.cs" />
     <Compile Include="ICollidable.cs" />
@@ -42,34 +41,21 @@
     <Compile Include="Programmability\EntityStateController.cs" />
     <Compile Include="Programmability\EntityEventHandlers.cs" />
     <Compile Include="Programmability\IEntityStateCheckProvider.cs" />
-    <Compile Include="TileCollisionEventArgs.cs" />
     <Compile Include="Data\AvatarDefinition.cs" />
-    <Compile Include="Data\ControllerConfig.cs" />
     <Compile Include="Data\LevelDefinition.cs" />
     <Compile Include="Data\EntityDefinition.cs" />
     <Compile Include="Data\LevelSummary.cs" />
-    <Compile Include="Data\TileDefinition.cs" />
     <Compile Include="EntityBase.cs" />
-    <Compile Include="FrameEventArgs.cs" />
     <Compile Include="Factories\AvatarFactoryBase.cs" />
-    <Compile Include="Factories\ReflectionControllerFactory.cs" />
-    <Compile Include="Factories\IControllerFactory.cs" />
     <Compile Include="Factories\EntityFactoryBase.cs" />
-    <Compile Include="Factories\TileFactoryBase.cs" />
     <Compile Include="Factories\WorldFactoryBase.cs" />
-    <Compile Include="Factories\ResourceFactoryBase.cs" />
     <Compile Include="Factories\GameFactoryBase.cs" />
     <Compile Include="Factories\IGameFactory.cs" />
-    <Compile Include="Factories\ITileFactory.cs" />
     <Compile Include="Factories\IAvatarFactory.cs" />
     <Compile Include="Factories\IEntityFactory.cs" />
     <Compile Include="Factories\IWorldFactory.cs" />
     <Compile Include="IObject.cs" />
     <Compile Include="ObjectBase.cs" />
-    <Compile Include="TileBase.cs" />
-    <Compile Include="Data\Material.cs" />
-    <Compile Include="TileInstance.cs" />
-    <Compile Include="ITile.cs" />
     <Compile Include="GameBase.cs" />
     <Compile Include="Data\GameDefinition.cs" />
     <Compile Include="AvatarState.cs" />
@@ -82,6 +68,30 @@
     <Compile Include="Programmability\IEntityController.cs" />
     <Compile Include="AvatarBase.cs" />
     <Compile Include="WorldBase.cs" />
+    <Compile Include="Vector2D.cs" />
+    <Compile Include="Vector3D.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Input\IInputManager.cs" />
+    <Compile Include="Input\IInputSource.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\InputMapping.cs" />
+    <Compile Include="Input\InputPhase.cs" />
+    <Compile Include="Input\IInputMapping.cs" />
+    <Compile Include="Input\KeyInputMapping.cs" />
+    <Compile Include="Input\AnalogInputMapping.cs" />
+    <Compile Include="Input\ButtonInputMapping.cs" />
+    <Compile Include="IPlayer.cs" />
+    <Compile Include="Programmability\IWorldController.cs" />
+    <Compile Include="Programmability\WorldController.cs" />
+    <Compile Include="Programmability\MappedInputController.cs" />
+    <Compile Include="Programmability\WorldEventHandlers.cs" />
+    <Compile Include="Programmability\IMappedInputController.cs" />
+    <Compile Include="Programmability\FrameEventArgs.cs" />
+    <Compile Include="Programmability\UIEventArgs.cs" />
+    <Compile Include="Programmability\CollisionEventArgs.cs" />
+    <Compile Include="Programmability\IObjective.cs" />
+    <Compile Include="Programmability\Objective.cs" />
+    <Compile Include="Programmability\ObjectiveAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -95,4 +105,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(BuildToolsDir)Common.targets" />
+  <ItemGroup>
+    <None Include="ReadMe.md" />
+  </ItemGroup>
 </Project>

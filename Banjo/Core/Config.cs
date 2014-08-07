@@ -30,6 +30,7 @@ namespace Core
             new Dictionary<Type, Func<string, object>>
             {
                 { typeof(string), value => value },
+                { typeof(bool), value => bool.Parse(value) },
                 { typeof(short), value => Convert.ToInt16(value) },
                 { typeof(int), value => Convert.ToInt32(value) },
                 { typeof(long), value => Convert.ToInt64(value) },
@@ -79,7 +80,7 @@ namespace Core
         {
             if (!this.HasValue(key))
             {
-                return default(TValue);
+                return defaultValue;
             }
 
             var value = this.GetValue(key);
@@ -95,7 +96,9 @@ namespace Core
                 return this.GetValue<TValue>(key, s => (TValue)ValueDeserializers[type](s));
             }
 
-            return default(TValue);
+            Log.Warning("Config - No parser found for type {0} (value: '{1}')", type.FullName, value);
+
+            return defaultValue;
         }
 
         /// <summary>Gets a value or the default if it doesn't exist</summary>

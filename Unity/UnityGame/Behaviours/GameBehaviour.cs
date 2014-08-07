@@ -20,9 +20,8 @@ using UnityEngine;
 
 namespace Game.Unity.Behaviours
 {
-    /// <summary>Behaviour for Avatar Prefab Resources</summary>
+    /// <summary>Behaviour for the game</summary>
     /// <remarks>TODO: MAJOR CLEANUP NEEDED HERE!!!!!!</remarks>
-    [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "MonoBehaviour")]
     [AddComponentMenu("Banjo/Game/Game")]
     public class GameBehaviour : MonoBehaviour
     {

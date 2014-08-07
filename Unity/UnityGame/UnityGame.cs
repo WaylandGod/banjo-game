@@ -5,12 +5,12 @@
 //-----------------------------------------------------------------------
 
 using Core;
-using Core.Input;
 using Core.Resources.Management;
 using Core.Unity;
 using Game;
 using Game.Data;
 using Game.Factories;
+using Game.Input;
 using Game.Unity.Behaviours;
 using UnityEngine;
 

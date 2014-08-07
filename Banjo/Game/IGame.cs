@@ -38,6 +38,18 @@ namespace Game
         /// <summary>Gets the current world</summary>
         IWorld World { get; }
 
+        /// <summary>Gets a value indicating whether the current game is finished</summary>
+        /// <remarks>Completed and Failed properties should be used to determine what to do next</remarks>
+        bool Done { get; }
+
+        /// <summary>Gets a value indicating whether the objective has been completed</summary>
+        /// <remarks>When true the game should exit play and enter level results UI</remarks>
+        bool Completed { get; }
+
+        /// <summary>Gets a value indicating whether the objective has failed</summary>
+        /// <remarks>When true the game should reset the level</remarks>
+        bool Failed { get; }
+
         /// <summary>Loads the specified world</summary>
         /// <param name="levelId">World identifier</param>
         void LoadLevel(string levelId);

@@ -7,82 +7,51 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Input;
+using System.Reflection;
 
 namespace Core.Programmability
 {
     /// <summary>Manages all controllers</summary>
     public class ControllerManager : IControllerManager
     {
-        /// <summary>Table of event controller set invocations</summary>
-        /// <remarks>
-        /// Keys must match the method being invoked. They are used in finding
-        /// implemented event handlers in the controllers as they are added.
-        /// </remarks>
-        private readonly IDictionary<string, ControllerEventHandlerSet> eventHandlers = new Dictionary<string, ControllerEventHandlerSet>();
+        /// <summary>Table of controller event handler sets</summary>
+        private readonly IDictionary<string, IControllerEventHandlerSet> eventHandlers = new Dictionary<string, IControllerEventHandlerSet>();
 
-        /// <summary>Adds an event handler which will later be searched for in IController implementations</summary>
+        /// <summary>Adds an event handler mapping for the specified event name to the handler method</summary>
         /// <typeparam name="TController">Type of the declaring controller</typeparam>
         /// <typeparam name="TEventArgs">Type of the event</typeparam>
-        /// <param name="handlerName">Handler name (must match the controller method name)</param>
-        /// <param name="invocation">Action to invoke the event</param>
-        public void AddEventHandler<TController, TEventArgs>(string handlerName, Action<TController, TEventArgs> invocation)
+        /// <param name="eventName">Named used to send events to this handler</param>
+        /// <param name="handlerName">Name of the TController method to invoke</param>
+        public void AddEventHandler<TController, TEventArgs>(string eventName, string handlerName)
             where TController : IController
             where TEventArgs : EventArgs
         {
-            //// Log.Trace("ControllerManager.AddEventHandler<{0}, {1}>('{2}')", typeof(TController).FullName, typeof(TEventArgs).FullName, handlerName);
-            this.eventHandlers[handlerName] = ControllerEventHandlerSet.Create<TController, TEventArgs>(invocation);
+            var handler = typeof(TController).GetMethod(handlerName);
+            this.eventHandlers[eventName] = new ControllerEventHandlerSet<TController, TEventArgs>(handler);
         }
 
         /// <summary>Adds a controller to the applicable controller event handler sets</summary>
         /// <param name="controller">The controller</param>
         public void AddController(IController controller)
         {
-            var type = controller.GetType();
-            //// Log.Trace("Adding controller {0} for '{1}'...", type.FullName, controller.Target.Id);
-            foreach (var set in this.eventHandlers)
+            foreach (var handlerSet in this.eventHandlers)
             {
-                var method = type.GetMethod(set.Key, new[] { set.Value.EventType });
-                if (method != null && method.GetCustomAttributes(typeof(EventHandlerAttribute), true).Length > 0)
+                if (handlerSet.Value.AddController(controller))
                 {
-                    //// Log.Trace("Adding controller event handler: {0}::{1}", type.FullName, method.Name);
-                    
-                    // TODO: Move into ControllerEventHandlerSet.AddController
-                    if (!set.Value.Controllers.ContainsKey(controller.Target.Id))
-                    {
-                        set.Value.Controllers.Add(controller.Target.Id, new List<IController>());
-                    }
-
-                    set.Value.Controllers[controller.Target.Id].Add(controller);
+#if DEBUG
+                    ////Log.Trace("Added controller {0} to handlerSet {1}", controller.Id, handlerSet.Key);
+#endif
                 }
             }            
         }
 
-        /// <summary>Removes a controller the applicable event handler sets</summary>
-        /// <param name="controller">The controller</param>
-        public void RemoveController(IController controller)
-        {
-            var type = controller.GetType();
-            foreach (var set in this.eventHandlers)
-            {
-                // TODO: Move into ControllerEventHandlerSet.RemoveController
-                var method = type.GetMethod(set.Key.ToString(), new[] { set.Value.EventType });
-                if (method != null && method.DeclaringType == type &&
-                    set.Value.Controllers.ContainsKey(controller.Target.Id))
-                {
-                    set.Value.Controllers[controller.Target.Id].Remove(controller);
-                }
-            }
-        }
-
         /// <summary>Removes controllers for a target from all event handler sets</summary>
         /// <param name="targetId">Runtime identifier of the controller target</param>
-        public void RemoveController(RuntimeId targetId)
+        public void RemoveControllerTarget(RuntimeId targetId)
         {
-            foreach (var set in this.eventHandlers)
+            foreach (var handlerSet in this.eventHandlers.Values)
             {
-                // TODO: Move into ControllerEventHandlerSet.RemoveTarget
-                set.Value.Controllers.Remove(targetId);
+                handlerSet.RemoveControllerTarget(targetId);
             }
         }
 
@@ -92,7 +61,8 @@ namespace Core.Programmability
         /// <param name="e">Data for the event</param>
         public void SendEvent<TEventArgs>(string eventHandler, TEventArgs e) where TEventArgs : EventArgs
         {
-            this.FindControllerSet(eventHandler).SendEvent(e);
+            var controllerSet = this.FindControllerSet(eventHandler);
+            if (controllerSet != null) controllerSet.SendEvent(e);
         }
 
         /// <summary>Sends the event to controllers implementing the named event handler for the specified target</summary>
@@ -102,76 +72,153 @@ namespace Core.Programmability
         /// <param name="e">Data for the event</param>
         public void SendEvent<TEventArgs>(string eventHandler, RuntimeId targetId, TEventArgs e) where TEventArgs : EventArgs
         {
-            this.FindControllerSet(eventHandler).SendEvent(targetId, e);
+            var controllerSet = this.FindControllerSet(eventHandler);
+            if (controllerSet != null) controllerSet.SendEvent(targetId, e);
         }
 
         /// <summary>Finds the controller set for the specified event handler name</summary>
         /// <param name="eventHandler">The event handler</param>
         /// <returns>The controller set</returns>
         /// <exception cref="IndexOutOfRangeException">If no controller set exists for the given event handler name</exception>
-        private ControllerEventHandlerSet FindControllerSet(string eventHandler)
+        private IControllerEventHandlerSet FindControllerSet(string eventHandler)
         {
 #if DEBUG
             if (!this.eventHandlers.ContainsKey(eventHandler))
             {
-                var msg = "Invalid event handler '{0}'\nValid handlers: {1}"
-                    .FormatInvariant(eventHandler, string.Join(", ", this.eventHandlers.Keys.Select(k => k.ToString()).ToArray()));
-                throw new ArgumentOutOfRangeException("eventHandler", msg);
+                Log.Warning("Invalid event handler '{0}'\nValid handlers: {1}", eventHandler, string.Join(", ", this.eventHandlers.Keys.Select(k => k.ToString()).ToArray()));
+                return null;
             }
 #endif
             return this.eventHandlers[eventHandler];
         }
 
-        /// <summary>A set of controllers on which an event may be run</summary>
-        private class ControllerEventHandlerSet
+        private interface IControllerEventHandlerSet
         {
-            /// <summary>Invocation for the controllers</summary>
-            private readonly Action<IController, EventArgs> invocation;
+            bool AddController(IController controller);
+            bool RemoveControllerTarget(RuntimeId targetId);
+            void SendEvent(EventArgs e);
+            void SendEvent(RuntimeId targetId, EventArgs e);
+        }
+
+        /// <summary>A set of controllers on which an event may be run</summary>
+        private class ControllerEventHandlerSet<TController, TEventArgs> : IControllerEventHandlerSet
+            where TController : IController
+            where TEventArgs : EventArgs
+        {
+            private const BindingFlags EventHandlerBinding = BindingFlags.Instance | BindingFlags.Public; // | BindingFlags.DeclaredOnly;
+
+            private delegate void ControllerEventHandler(TEventArgs e);
+
+            /// <summary>Table of handlers by target ids</summary>
+            private readonly IDictionary<RuntimeId, IList<ControllerEventHandler>> handlers;
+
+            private readonly string methodName;
+            private readonly Type controllerType;
+            private readonly Type eventType;
 
             /// <summary>Initializes a new instance of the ControllerEventHandlerSet class</summary>
             /// <param name="eventType">Type of event for the controller set</param>
             /// <param name="invocation">Controller event handler invocation</param>
-            private ControllerEventHandlerSet(Type eventType, Action<IController, EventArgs> invocation)
+            public ControllerEventHandlerSet(MethodInfo method)
             {
-                this.Controllers = new Dictionary<RuntimeId, IList<IController>>();
-                this.EventType = eventType;
-                this.invocation = invocation;
+                // TODO: invocation validation?
+                this.handlers = new Dictionary<RuntimeId, IList<ControllerEventHandler>>();
+                this.controllerType = typeof(TController);
+                this.eventType = typeof(TEventArgs);
+                this.methodName = method.Name;
+
+                var methodParameters = method.GetParameters();
+                if (methodParameters.Length != 1)
+                {
+                    Log.Error("Handler does not take an event parameter");
+                }
+
+                if (methodParameters[0].ParameterType != this.eventType)
+                {
+                    Log.Error("Incorrect event type '{0}' (expected {1})", methodParameters[0].ParameterType.FullName, this.eventType.FullName);
+                }
             }
 
-            /// <summary>Gets the type of the event for the controller set</summary>
-            public Type EventType { get; private set; }
-
-            /// <summary>Gets the list of controllers</summary>
-            public IDictionary<RuntimeId, IList<IController>> Controllers { get; private set; }
-
-            /// <summary>Creates an event controller set</summary>
-            /// <typeparam name="TController">Type of the declaring controller</typeparam>
-            /// <typeparam name="TEventArgs">Type of the event</typeparam>
-            /// <param name="invocation">Action to invoke the event</param>
-            /// <returns>The created event controller set</returns>
-            public static ControllerEventHandlerSet Create<TController, TEventArgs>(Action<TController, TEventArgs> invocation)
-                where TController : IController
-                where TEventArgs : EventArgs
+            public bool AddController(IController controller)
             {
-                return new ControllerEventHandlerSet(typeof(TEventArgs), (c, e) => invocation((TController)c, (TEventArgs)e));
+                // Check the controller's target type
+                if (!this.controllerType.IsAssignableFrom(controller.GetType()))
+                {
+                    return false;
+                }
+
+                // Find if the controller implements this event
+                var controllerType = controller.GetType();
+                MethodInfo controllerMethod;
+                try
+                {
+                    controllerMethod = controllerType.GetMethod(this.methodName, new[] { typeof(TEventArgs) });
+                }
+                catch (Exception e)
+                {
+                    // TODO: Add details
+                    Log.Error("Error retrieving handler method for controller: {0}", e);
+                    return false;
+                }
+
+                // Controller does not implement a handler for this event
+                if (controllerMethod == null) return false;
+
+                // Don't add handlers for methods that have not been overridden
+                if (controllerMethod == controllerMethod.GetBaseDefinition())
+                {
+                    return false;
+                }
+
+                // Create a delegate for invoking the event on this controller instance
+                ControllerEventHandler handler;
+                try
+                {
+                    handler = (ControllerEventHandler)Delegate.CreateDelegate(typeof(ControllerEventHandler), controller, controllerMethod);
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Error binding controller handler: {0}", e);
+                    return false;
+                }
+
+                // Add a handler list for this controller if not already present
+                var targetId = controller.Target.Id;
+                if (!this.handlers.ContainsKey(targetId))
+                {
+                    this.handlers.Add(targetId, new List<ControllerEventHandler>());
+                }
+
+                // Add the handler to the list
+                this.handlers[targetId].Add(handler);
+                return true;
+            }
+
+            /// <summary>Removes all handlers for the specified controller target.</summary>
+            /// <returns>True, if controller was removed; otherwise, false.</returns>
+            public bool RemoveControllerTarget(RuntimeId targetId)
+            {
+                return this.handlers.Remove(targetId);
             }
 
             /// <summary>Send an event to all controllers in the set</summary>
             /// <param name="e">Event data</param>
             public void SendEvent(EventArgs e)
             {
+                if (e == null) throw new ArgumentNullException("e", "EventArgs must not be null");
+
 #if DEBUG
-                if (!this.EventType.IsAssignableFrom(e.GetType()))
+                if (!this.eventType.IsAssignableFrom(e.GetType()))
                 {
-                    throw new ArgumentException("Incorrect event type. Was: {0}, Expecting: {1}".FormatInvariant(e.GetType().FullName, this.EventType.FullName), "e");
+                    throw new ArgumentException("Incorrect event type. Was: {0}, Expecting: {1}".FormatInvariant(e.GetType().FullName, this.eventType.FullName), "e");
                 }
 #endif
-
-                foreach (var controllers in this.Controllers.Values)
+                var eventArgs = (TEventArgs)e;
+                foreach (var controllers in this.handlers.Values)
                 {
-                    foreach (var controller in controllers)
+                    foreach (var handler in controllers)
                     {
-                        this.invocation(controller, e);
+                        handler(eventArgs);
                     }
                 }
             }
@@ -182,26 +229,29 @@ namespace Core.Programmability
             public void SendEvent(RuntimeId targetId, EventArgs e)
             {
 #if DEBUG
-                if (!this.EventType.IsAssignableFrom(e.GetType()))
+                if (!this.eventType.IsAssignableFrom(e.GetType()))
                 {
-                    throw new ArgumentException("Incorrect event type. Was: {0}, Expecting: {1}".FormatInvariant(e.GetType().FullName, this.EventType.FullName), "e");
+                    throw new ArgumentException("Incorrect event type. Was: {0}, Expecting: {1}".FormatInvariant(e.GetType().FullName, this.eventType.FullName), "e");
                 }
 #endif
-                if (!this.Controllers.ContainsKey(targetId))
+                if (!this.handlers.ContainsKey(targetId))
                 {
-                    /*
+#if LOG_VERBOSE
+                                    /*
                     Log.Trace(
                         "SendEvent<{0}> - Controller not found: '{1}'\nControllers:\n",
                         this.EventType.FullName,
                         targetId,
                         this.Controllers.Keys);
                      */
-                    return;
+#endif
+                     return;
                 }
 
-                foreach (var controller in this.Controllers[targetId])
+                var eventArgs = (TEventArgs)e;
+                foreach (var handler in this.handlers[targetId])
                 {
-                    this.invocation(controller, e);
+                    handler(eventArgs);
                 }
             }
         }

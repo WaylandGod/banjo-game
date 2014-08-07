@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.DependencyInjection;
-using Core.Input;
 
 namespace Core.Programmability
 {
@@ -17,12 +16,6 @@ namespace Core.Programmability
     {
         /// <summary>Backing field for ControllerManager</summary>
         private static IControllerManager controllerManager;
-
-        /// <summary>Initializes static members of the Controller class</summary>
-        static Controller()
-        {
-            ControllerManager.AddEventHandler<IController, InputEventArgs>(ControllerEventHandlers.OnInput, (c, e) => c.OnInput(e));
-        }
 
         /// <summary>Initializes a new instance of the Controller class</summary>
         /// <param name="target">Target to be controlled</param>
@@ -37,8 +30,6 @@ namespace Core.Programmability
             this.Id = new RuntimeId(controllerId);
             this.Target = target;
             this.Config = config;
-
-            //// Log.Trace("New controller - target: {0}, id: {1},\nsettings: {2}", target.Id, this.Id, this.Config);
         }
         
         /// <summary>Gets the runtime identifier</summary>
@@ -74,19 +65,8 @@ namespace Core.Programmability
             return this.Id.ToString();
         }
 
-        /// <summary>When an input event occurs</summary>
-        /// <param name="e">Input event args</param>
-        public virtual void OnInput(InputEventArgs e) { }
-
         /// <summary>Dispose of native/managed resources</summary>
         /// <param name="disposing">Whether the object is being disposed</param>
         protected virtual void Dispose(bool disposing) { }
-
-        /// <summary>Controller event handler names</summary>
-        public static class ControllerEventHandlers
-        {
-            /// <summary>OnInput event handler name</summary>
-            public const string OnInput = "OnInput";
-        }
     }
 }

@@ -19,9 +19,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AsyncLoggerWrapper.cs" />
-    <Compile Include="CompassPoints.cs" />
     <Compile Include="DictionaryConfig.cs" />
-    <Compile Include="Extensions\CoreExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="GenericAsyncLogger.cs" />
     <Compile Include="CoreException.cs" />
@@ -34,15 +32,12 @@
     <Compile Include="DependencyInjection\GlobalContainer.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\TextExtensions.cs" />
-    <Compile Include="FactoryBase.cs" />
     <Compile Include="IConfig.cs" />
-    <Compile Include="IFactory.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Programmability\Controller.cs" />
     <Compile Include="Programmability\ControllerAttribute.cs" />
     <Compile Include="Programmability\ControllerManager.cs" />
-    <Compile Include="Programmability\EventHandlerAttribute.cs" />
     <Compile Include="Programmability\IControllerTarget.cs" />
     <Compile Include="Programmability\IController.cs" />
     <Compile Include="Programmability\IControllerManager.cs" />
@@ -66,18 +61,14 @@
     <Compile Include="Resources\Management\UnknownResourceTypeException.cs" />
     <Compile Include="Resources\SerializedResource.cs" />
     <Compile Include="RuntimeId.cs" />
-    <Compile Include="Vector2.cs" />
-    <Compile Include="Vector3.cs" />
-    <Compile Include="Input\ActionInputEventArgs.cs" />
-    <Compile Include="Input\DirectionalInputEventArgs.cs" />
-    <Compile Include="Input\IInputManager.cs" />
-    <Compile Include="Input\IInputSource.cs" />
-    <Compile Include="Input\InputEventArgs.cs" />
-    <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\InputMapping.cs" />
-    <Compile Include="Input\InputPhase.cs" />
-    <Compile Include="Input\MappedInputEventArgs.cs" />
-    <Compile Include="Input\RawInputEventArgs.cs" />
+    <Compile Include="Data\SettingsConfig.cs" />
+    <Compile Include="Programmability\ControllerTarget.cs" />
+    <Compile Include="Factories\IControllerFactory.cs" />
+    <Compile Include="Factories\FactoryBase.cs" />
+    <Compile Include="Factories\IFactory.cs" />
+    <Compile Include="Factories\ResourceFactoryBase.cs" />
+    <Compile Include="Factories\ReflectionControllerFactory.cs" />
+    <Compile Include="Data\ControllerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,4 +92,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <Import Project="$(BuildToolsDir)Common.targets" />
+  <ItemGroup>
+    <Folder Include="Factories\" />
+  </ItemGroup>
 </Project>

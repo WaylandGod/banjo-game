@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigFixture.cs" />
-    <Compile Include="CompassPointsFixture.cs" />
     <Compile Include="ControllerManagerFixture.cs" />
     <Compile Include="LoggingFixture.cs" />
     <Compile Include="DependencyContainerFixture.cs" />
@@ -52,7 +51,6 @@
     <Compile Include="ResourceManagerFixture.cs" />
     <Compile Include="RuntimeIdFixture.cs" />
     <Compile Include="SerializationFixture.cs" />
-    <Compile Include="VectorsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

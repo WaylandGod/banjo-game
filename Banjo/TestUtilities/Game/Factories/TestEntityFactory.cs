@@ -5,6 +5,8 @@
 //-----------------------------------------------------------------------
 
 using Core;
+using Core.Data;
+using Core.Factories;
 using Core.Resources.Management;
 using Game;
 using Game.Data;
@@ -16,34 +18,31 @@ namespace TestUtilities.Game.Factories
     public class TestEntityFactory : EntityFactoryBase, IEntityFactory
     {
         /// <summary>Initializes a new instance of the TestEntityFactory class</summary>
-        /// <param name="resources">Resource library</param>
-        /// <param name="avatarFactory">Avatar factory</param>
-        /// <param name="controllerFactory">Controller factory</param>
         public TestEntityFactory(
             IResourceLibrary resources,
             IAvatarFactory avatarFactory,
-            IControllerFactory controllerFactory)
-            : base(resources, avatarFactory, controllerFactory) { }
+            IControllerFactory[] controllerFactories)
+            : base(resources, avatarFactory, controllerFactories) { }
 
         /// <summary>Creates an instance of IEntity</summary>
         /// <param name="definition">Entity definition</param>
-        /// <param name="controllers">Additional controllers</param>
         /// <param name="position">Initial position</param>
         /// <param name="direction">Initial direction</param>
         /// <param name="velocity">Initial velocity</param>
+        /// <param name="controllers">Additional controllers</param>
         /// <returns>The created IEntity instance</returns>
         public override IEntity Create(
             EntityDefinition definition,
             ControllerConfig[] controllers,
-            Vector3 position,
-            Vector3 direction,
-            Vector3 velocity)
+            Vector3D position,
+            Vector3D direction,
+            Vector3D velocity)
         {
             return new TestEntity(
                 definition,
                 this.Resources,
                 this.AvatarFactory,
-                this.ControllerFactory,
+                this.ControllerFactories,
                 controllers,
                 position,
                 direction,

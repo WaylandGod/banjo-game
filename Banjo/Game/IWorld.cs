@@ -19,27 +19,37 @@
 using System;
 using System.Collections.Generic;
 using Core;
+using Core.Programmability;
 using Game.Data;
 using Game.Programmability;
 
 namespace Game
 {
     /// <summary>Represents a game world</summary>
-    public interface IWorld : IDisposable
+    public interface IWorld : IControllerTarget, IDisposable
     {
-        /// <summary>Gets the runtime identifier</summary>
-        RuntimeId Id { get; }
-
         /// <summary>Gets the world's world summary</summary>
         LevelSummary Summary { get; }
 
         /// <summary>Gets all entities in the world</summary>
         IEnumerable<IEntity> Entities { get; }
 
-        /// <summary>Gets all tiles in the world</summary>
-        IEnumerable<ITile> Tiles { get; }
-
         /// <summary>Gets all entity controllers in the world</summary>
         IEnumerable<IEntityController> EntityControllers { get; }
+
+        /// <summary>Gets the world's controllers</summary>
+        IWorldController[] Controllers { get; }
+
+        /// <summary>Gets the player information</summary>
+        IPlayer Player { get; }
+
+        /// <summary>Gets the current state of the objectives</summary>
+        IEnumerable<IObjective> Objectives { get; }
+
+        /// <summary>Gets the current state of the required objectives</summary>
+        IEnumerable<IObjective> RequiredObjectives { get; }
+
+        /// <summary>Gets the current state of the optional objectives</summary>
+        IEnumerable<IObjective> OptionalObjectives { get; }
     }
 }

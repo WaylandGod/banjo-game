@@ -8,107 +8,104 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Input;
+using Core.Data;
+using Core.Factories;
 using Core.Programmability;
 using Core.Resources.Management;
 using Game;
 using Game.Data;
 using Game.Factories;
+using Game.Input;
 using Game.Programmability;
 
-namespace Game.Unity
+namespace Game
 {
     /// <summary>Base class for IWorld implementations</summary>
-    public abstract class WorldBase : IWorld, IDisposable
+    /// <remarks>Includes game state determinations and controller event dispatching</remarks>
+    public abstract class WorldBase : ControllerTarget<IWorldController>, IWorld, IDisposable
     {
-        /// <summary>Backing field for Entities</summary>
-        private readonly IList<IEntity> entities;
+        /// <summary>Backing field for ControllerManager</summary>
+        private readonly IControllerManager _controllerManager;
 
         /// <summary>Backing field for Entities</summary>
-        private readonly ITile[] tiles;
+        private readonly IList<IEntity> _entities;
 
         /// <summary>Initializes a new instance of the WorldBase class</summary>
-        /// <param name="definition">World definition</param>
-        /// <param name="resources">Resource library</param>
-        /// <param name="controllerManager">Controller manager</param>
-        /// <param name="entityFactory">Entity factory</param>
-        /// <param name="tileFactory">Tile factory</param>
-        public WorldBase(LevelDefinition definition, IResourceLibrary resources, IControllerManager controllerManager, IEntityFactory entityFactory, ITileFactory tileFactory)
+        public WorldBase(
+            LevelDefinition definition,
+            IResourceLibrary resources,
+            IControllerManager controllerManager,
+            IControllerFactory[] controllerFactories,
+            IEntityFactory entityFactory)
+        : base(definition.Id, controllerFactories, definition.Controllers)
         {
-            this.Id = new RuntimeId(definition.Id);
-            this.Summary = definition.Summary;
-            this.ControllerManager = controllerManager;
-            this.entities = definition.Entities
+            this._controllerManager = controllerManager;
+            this._entities = definition.Entities
                 .Select(entity =>
-                    {
-                        //// Log.Trace("Loading entity: '{0}'", entity.EntityId);
-                        return entityFactory.Create(
-                            resources.GetSerializedResource<EntityDefinition>(entity.EntityId),
-                            entity.Controllers,
-                            entity.Position,
-                            entity.Direction,
-                            entity.Velocity);
-                    })
+                    entityFactory.Create(
+                        resources.GetSerializedResource<EntityDefinition>(entity.EntityId),
+                        entity.Controllers,
+                        entity.Position,
+                        entity.Direction,
+                        entity.Velocity))
                 .ToList();
-
-            if (definition.Tiles != null && definition.Map != null)
-            {
-                this.tiles = definition.Tiles
-                    .Select(tileId => tileFactory.Create(
-                        resources.GetSerializedResource<TileDefinition>(tileId)))
-                    .ToArray();
-
-                Vector3 position;
-                float x = 0f, z = 0f;
-                var map = definition.Map;
-                foreach (var tile in map.Tiles)
-                {
-                    position = new Vector3(x, 0, z) * map.TileSpacing; // TODO: Add Y for layer
-                    this.tiles[tile].AddInstance(position);
-
-                    if (++x == map.Breadth)
-                    {
-                        x = 0;
-                        z++;
-                    }
-                }
-            }
+            this.Summary = definition.Summary;
         }
-
-        /// <summary>Gets the runtime identifier</summary>
-        public RuntimeId Id { get; private set; }
 
         /// <summary>Gets the world's world summary</summary>
         public LevelSummary Summary { get; private set; }
 
         /// <summary>Gets all entities in the world</summary>
-        public IEnumerable<IEntity> Entities { get { return this.entities; } }
+        public IEnumerable<IEntity> Entities { get { return this._entities; } }
 
-        /// <summary>Gets all tiles in the world</summary>
-        public IEnumerable<ITile> Tiles { get { return this.tiles; } }
-        
         /// <summary>Gets all entity controllers in the world</summary>
         public IEnumerable<IEntityController> EntityControllers
         {
             get { return this.Entities.SelectMany(e => e.Controllers); }
         }
 
-        /// <summary>Gets the controller manager</summary>
-        protected IControllerManager ControllerManager { get; private set; }
+        /// <summary>Gets the player information</summary>
+        public IPlayer Player { get; private set; }
 
-        /// <summary>Called on each frame update</summary>
-        /// <param name="e">Frame event args</param>
+        /// <summary>Gets the current state of the objectives</summary>
+        public IEnumerable<IObjective> Objectives { get { return this.Controllers.SelectMany(c => c.Objectives); } }
+
+        /// <summary>Gets the current state of the required objectives</summary>
+        public IEnumerable<IObjective> RequiredObjectives { get { return this.Objectives.Where(o => o.Required); } }
+
+        /// <summary>Gets the current state of the optional objectives</summary>
+        public IEnumerable<IObjective> OptionalObjectives { get { return this.Objectives.Where(o => !o.Required); } }
+
+        /// <summary>Gets the controller manager</summary>
+        protected IControllerManager ControllerManager { get { return this._controllerManager; } }
+
+        /// <summary>Send the OnStart event to all world and entity controllers</summary>
+        public virtual void OnStart(EventArgs e)
+        {
+            this.ControllerManager.SendEvent<EventArgs>(WorldEventHandlers.OnStart, e);
+            this.ControllerManager.SendEvent<EventArgs>(EntityEventHandlers.OnStart, e);
+        }
+
+        /// <summary>Send the OnUpdate event to all world and entity controllers</summary>
         public virtual void OnUpdate(FrameEventArgs e)
         {
-            this.ControllerManager.SendEvent<FrameEventArgs>("OnUpdate", e);
+            this.ControllerManager.SendEvent<FrameEventArgs>(WorldEventHandlers.OnUpdate, e);
+            this.ControllerManager.SendEvent<FrameEventArgs>(EntityEventHandlers.OnUpdate, e);
+        }
+
+        /// <summary>Send the OnDrawUI event to all world and entity controllers</summary>
+        public virtual void OnDrawUI(EventArgs e)
+        {
+            this.ControllerManager.SendEvent<EventArgs>(WorldEventHandlers.OnDrawUI, e);
+            this.ControllerManager.SendEvent<EventArgs>(EntityEventHandlers.OnDrawUI, e);
         }
 
         /// <summary>Gets a string representation of the world</summary>
         /// <returns>A string representation of the world</returns>
         public override string ToString()
         {
-            return "{0} - Tiles: {1}; Entities: {2}"
-                .FormatInvariant(this.Id, (this.tiles != null) ? this.tiles.Length : 0, (this.entities != null) ? this.entities.Count : 0);
+            return "{0} - Entities: {1}"
+                .FormatInvariant(this.Id, (this.Entities != null) ? this.Entities.Count() : 0);
         }
 
         /// <summary>Disposes of resources</summary>
@@ -125,14 +122,14 @@ namespace Game.Unity
             if (disposing)
             {
                 // Dispose of the entities
-                while (this.entities.Count > 0)
+                while (this._entities.Count > 0)
                 {
-                    var entity = this.entities.FirstOrDefault();
+                    var entity = this.Entities.FirstOrDefault();
                     if (entity != null)
                     {
                         try
                         {
-                            this.entities.First().Dispose();
+                            this.Entities.First().Dispose();
                         }
                         catch (Exception e)
                         {
@@ -140,27 +137,7 @@ namespace Game.Unity
                         }
                     }
 
-                    this.entities.RemoveAt(0);
-                }
-
-                // Dispose of the tiles
-                if (this.tiles != null)
-                {
-                    for (int i = 0; i < this.tiles.Length; i++)
-                    {
-                        if (this.tiles[i] != null)
-                        {
-                            try
-                            {
-                                this.tiles[i].Dispose();
-                                this.tiles[i] = null;
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Error("Error disposing tile '{0}': {1}", this.tiles[i].Id, e);
-                            }
-                        }
-                    }
+                    this._entities.RemoveAt(0);
                 }
             }
         }

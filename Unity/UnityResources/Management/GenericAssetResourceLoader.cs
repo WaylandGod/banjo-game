@@ -47,11 +47,12 @@ namespace Unity.Resources.Management
             {
                 Log.Error("Unable to load resource '{0}' ({1})", resourcePath, typeof(TAsset).FullName);
             }
+#if LOG_VERBOSE
             else
             {
                 Log.Trace("Loaded {0} '{1}' as {2}", asset.GetType().FullName, identifier, typeof(TAssetResource).FullName);
             }
-
+#endif
             return this.CreateAssetResource(asset as TAsset);
         }
     }

@@ -7,6 +7,7 @@
 namespace Core.Programmability
 {
     /// <summary>Represents a target for the controllers</summary>
+    /// <typeparam name="TController">Type of targetting controller</typeparam>
     public interface IControllerTarget
     {
         /// <summary>Gets the runtime identifier</summary>

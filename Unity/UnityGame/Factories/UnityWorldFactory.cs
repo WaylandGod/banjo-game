@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using Core.Factories;
 using Core.Programmability;
 using Core.Resources.Management;
 using Game;
@@ -20,28 +21,24 @@ namespace Game.Unity.Factories
     public class UnityWorldFactory : WorldFactoryBase
     {
         /// <summary>Initializes a new instance of the UnityWorldFactory class</summary>
-        /// <param name="resources">Resource library</param>
-        /// <param name="controllerManager">Controller manager</param>
-        /// <param name="entityFactory">Entity factory</param>
-        /// <param name="tileFactory">Tile factory</param>
         public UnityWorldFactory(
             IResourceLibrary resources,
             IControllerManager controllerManager,
-            IEntityFactory entityFactory,
-            ITileFactory tileFactory)
-            : base(resources, controllerManager, entityFactory, tileFactory) { }
+            IControllerFactory[] controllerFactories,
+            IEntityFactory entityFactory)
+        : base(resources, controllerManager, controllerFactories, entityFactory) { }
 
         /// <summary>Creates an instance of IWorld</summary>
         /// <param name="definition">World definition</param>
         /// <returns>The created IWorld instance</returns>
-        protected override IWorld Create(LevelDefinition definition)
+        public override IWorld Create(LevelDefinition definition)
         {
             return new UnityWorld(
                 definition,
                 this.Resources,
                 this.ControllerManager,
-                this.EntityFactory,
-                this.TileFactory);
+                this.ControllerFactories,
+                this.EntityFactory);
         }
     }
 }

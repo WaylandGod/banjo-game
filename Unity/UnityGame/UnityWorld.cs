@@ -5,6 +5,8 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using Core.Data;
+using Core.Factories;
 using Core.Programmability;
 using Core.Resources.Management;
 using Core.Unity;
@@ -20,13 +22,13 @@ namespace Game.Unity
     public class UnityWorld : WorldBase, IWorld
     {
         /// <summary>Initializes a new instance of the UnityWorld class</summary>
-        /// <param name="definition">World definition</param>
-        /// <param name="resources">Resource library</param>
-        /// <param name="controllerManager">Controller manager</param>
-        /// <param name="entityFactory">Entity factory</param>
-        /// <param name="tileFactory">Tile factory</param>
-        public UnityWorld(LevelDefinition definition, IResourceLibrary resources, IControllerManager controllerManager, IEntityFactory entityFactory, ITileFactory tileFactory)
-            : base(definition, resources, controllerManager, entityFactory, tileFactory)
+        public UnityWorld(
+            LevelDefinition definition,
+            IResourceLibrary resources,
+            IControllerManager controllerManager,
+            IControllerFactory[] controllerFactories,
+            IEntityFactory entityFactory)
+        : base(definition, resources, controllerManager, controllerFactories, entityFactory)
         {
             SafeECall.Invoke(() => WorldBehaviour.Instance.World = this);
         }

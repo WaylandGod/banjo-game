@@ -15,40 +15,42 @@ namespace Game.Unity.Behaviours
     public class WorldBehaviour : MonoBehaviour
     {
         /// <summary>Backing field for Instance</summary>
-        private static WorldBehaviour instance;
+        private static WorldBehaviour _instance;
 
         /// <summary>Gets the WorldBehaviour singleton</summary>
         public static WorldBehaviour Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    var go = new GameObject("World", typeof(WorldBehaviour));
-                    go.transform.parent = UnityGame.Transform;
-                    instance = go.GetComponent<WorldBehaviour>(true);
-                }
-
-                return instance;
-            }
+            get { return _instance ?? (_instance = CreateInstance()); }
         }
         
         /// <summary>Gets or sets the UnityWorld instance</summary>
         internal UnityWorld World { get; set; }
 
-        /// <summary>Called every frame</summary>
-        public void LateUpdate()
+        public void Start()
         {
-            if (this.World != null)
-            {
-                this.World.OnUpdate(new FrameEventArgs { TimeElapsed = Time.deltaTime });
-            }
+            if (this.World != null) this.World.OnStart(new EventArgs());
         }
 
-        /// <summary>Called when the behaviour instance is being destroyed</summary>
+        public void Update()
+        {
+            if (this.World != null) this.World.OnUpdate(new FrameEventArgs { TimeElapsed = Time.deltaTime });
+        }
+
+        public void OnGUI()
+        {
+            if (this.World != null) this.World.OnDrawUI(new EventArgs());
+        }
+
         public void OnDestroy()
         {
-            instance = null;
+            _instance = null;
+        }
+
+        private static WorldBehaviour CreateInstance()
+        {
+            var go = new GameObject("World", typeof(WorldBehaviour));
+            go.transform.parent = UnityGame.Transform;
+            return go.GetComponent<WorldBehaviour>(true);
         }
     }
 }

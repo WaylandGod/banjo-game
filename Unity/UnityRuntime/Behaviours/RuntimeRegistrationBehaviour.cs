@@ -19,7 +19,6 @@ namespace Unity.Runtime.Behaviours
         {
             GlobalContainer.Reset();
             UnityDependencyContainerManager.Register();
-            Log.Trace("Unity Runtime Dependencies Registered");
         }
     }
 }
